@@ -7,11 +7,15 @@ services:
       - "4580:80"
     volumes: 
       - ./reverse-proxy:/etc/nginx/conf.d/
+      - ./static:/static
     develop:
       watch:
         - action: sync+restart
           path: ./reverse-proxy
           target: /etc/nginx/conf.d/
+        - action: sync
+          path: ./static
+          target: /static
   alpha:
     build: alpha
     ports:
