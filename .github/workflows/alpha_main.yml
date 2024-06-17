@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.1
         with:
-          fetch-depth: 10
+          fetch-depth: 2
 
       - name: Set outputs
         id: variables
