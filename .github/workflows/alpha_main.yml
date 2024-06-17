@@ -26,19 +26,20 @@ jobs:
       tagged_image_previous: ${{ steps.variables.outputs.tagged_image_previous }}
       image_tar_filename: ${{ steps.variables.outputs.image_tar_filename }}
     steps:
-      - uses: actions/checkout@v4.1.1
-        with:
-          fetch-depth: 2
+#      - uses: actions/checkout@v4.1.1
+#        with:
+#          fetch-depth: 2
 
       - name: Set outputs
         id: variables
         run: |
           image_tag="${GITHUB_SHA:0:7}"
-          image_tag_previous=$(git rev-parse --short=7 HEAD^)
+          # image_tag_previous=$(git rev-parse --short=7 HEAD^)
           image_uri="${{ env.DOCKER_REGISTRY }}/${{ env.GITHUB_ORG_NAME }}/${{ github.event.repository.name }}-${{ env.SERVICE_NAME }}"
           image_name="${image_uri}:${image_tag}"
-          tagged_image_previous="${image_uri}:${image_tag_previous}"
-          image_tar_filename="/tmp/${{ github.event.repository.name }}-${{ env.SERVICE_NAME }}:${{ github.sha }}.tar"
+          tagged_image_previous="${image_uri}:previous"
+          # image_tar_filename="/tmp/${{ github.event.repository.name }}-${{ env.SERVICE_NAME }}:${{ github.sha }}.tar"
+          image_tar_filename="/tmp/${{ github.event.repository.name }}-${{ env.SERVICE_NAME }}:previous.tar"
             
           echo "image_tag=${image_tag}" >> ${GITHUB_OUTPUT}          
           echo "image_name=${image_name}" >> ${GITHUB_OUTPUT}          
