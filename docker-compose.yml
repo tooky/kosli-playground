@@ -1,4 +1,17 @@
 services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - "4580:80"
+    volumes: 
+      - ./reverse-proxy:/etc/nginx/conf.d/
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./reverse-proxy
+          target: /etc/nginx/conf.d/
   alpha:
     build: alpha
     ports:
@@ -6,7 +19,7 @@ services:
     develop:
       watch:
         - action: rebuild
-          path: alpha
+          path: ./alpha
   beta:
     build: beta
     ports:
@@ -14,4 +27,4 @@ services:
     develop:
       watch:
         - action: rebuild
-          path: beta
+          path: ./beta
