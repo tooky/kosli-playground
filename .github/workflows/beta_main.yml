@@ -1,4 +1,4 @@
-name: Build beta on main
+name: Build and test beta on main
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 
 env:
   DOCKER_REGISTRY: ghcr.io
-  GITHUB_ORG_NAME: kosli-dev
+  DOCKER_ORG_NAME: kosli-dev
   DOCKER_USERNAME: ${{ github.actor }}
   DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
   SERVICE_NAME: beta
@@ -20,6 +20,7 @@ env:
 jobs:
 
   setup:
+    name: Setup job variables
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.variables.outputs.image_tag }}
@@ -31,7 +32,7 @@ jobs:
         id: variables
         run: |
           image_tag="${GITHUB_SHA:0:7}"
-          image_uri="${{ env.DOCKER_REGISTRY }}/${{ env.GITHUB_ORG_NAME }}/${{ github.event.repository.name }}-${{ env.SERVICE_NAME }}"
+          image_uri="${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_ORG_NAME }}/${{ github.event.repository.name }}-${{ env.SERVICE_NAME }}"
           image_name="${image_uri}:${image_tag}"
           tagged_image_previous="${image_uri}:previous"
           image_tar_filename="/tmp/${{ github.event.repository.name }}-${{ env.SERVICE_NAME }}:previous.tar"            
@@ -42,7 +43,7 @@ jobs:
 
 
   build:
-    name: Docker Build
+    name: Build docker image and push it to registry
     runs-on: ubuntu-latest
     needs: [setup]
     permissions:
@@ -99,4 +100,3 @@ jobs:
       run: |
         cd "${{ env.SERVICE_NAME }}"        
         make lint
-  
