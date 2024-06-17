@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - alpha/**
+      - .github/workflows/alpha_main.yml
 
 env:
   DOCKER_REGISTRY: ghcr.io
