@@ -8,6 +8,7 @@ on:
       - beta/**
       - .github/workflows/beta_main.yml
 
+
 env:
   DOCKER_REGISTRY: ghcr.io
   GITHUB_ORG_NAME: kosli-dev
