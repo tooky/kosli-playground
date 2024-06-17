@@ -2,6 +2,7 @@
 
 require 'sinatra'
 
+# Example monorepo micro-service
 class Beta < Sinatra::Base
   get '/' do
     'Beta'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Ruby
@@ -21,11 +23,11 @@ gem 'thin'
 gem 'capybara'
 gem 'extjs'
 gem 'nokogiri'
-gem 'sinatra'
-gem 'sinatra-contrib'
 gem 'sass'
 gem 'sassc'
-gem 'sprockets'
 gem 'selenium-webdriver'
+gem 'sinatra'
+gem 'sinatra-contrib'
+gem 'sprockets'
 gem 'uglifier'
 gem 'uri'
