@@ -26,6 +26,7 @@ jobs:
       tagged_image_previous: ${{ steps.variables.outputs.tagged_image_previous }}
       image_tar_filename: ${{ steps.variables.outputs.image_tar_filename }}
     steps:
+
 #      - uses: actions/checkout@v4.1.1
 #        with:
 #          fetch-depth: 2
