@@ -70,7 +70,7 @@ jobs:
       with:
         context: ${{ env.SERVICE_NAME }}
         push: true
-        tags: ${{ needs.setup.outputs.image_name }}
+        tags: ${{ needs.setup.outputs.image_name }},${{ needs.setup.outputs.tagged_image_previous }}
         cache-from: type=registry,ref=${{ needs.setup.outputs.tagged_image_previous }}
         cache-to: type=inline,mode=max
 
