@@ -23,13 +23,23 @@ jobs:
     outputs:
       image_tag: ${{ steps.variables.outputs.image_tag }}
       image_name: ${{ steps.variables.outputs.image_name }}
+      tagged_image_previous: ${{ steps.variables.outputs.tagged_image_previous }}
+      image_tar_filename: ${{ steps.variables.outputs.image_tar_filename }}
     steps:
       - name: Set outputs
         id: variables
         run: |
-          IMAGE_TAG=${GITHUB_SHA:0:7}
-          echo "image_tag=${IMAGE_TAG}" >> ${GITHUB_OUTPUT}              
-          echo "image_name=${{ env.DOCKER_REGISTRY }}/${{ env.GITHUB_ORG_NAME }}/playground-alpha:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}          
+          image_tag="${GITHUB_SHA:0:7}"
+          image_tag_previous=$(git rev-parse --short=7 HEAD^)
+          image_uri="${{ env.DOCKER_REGISTRY }}/${{ env.GITHUB_ORG_NAME }}/${{ github.event.repository.name }}-${{ env.SERVICE_NAME }}"
+          image_name="${image_uri}:${image_tag}"
+          tagged_image_previous="${image_uri}:${image_tag_previous}"
+          image_tar_filename="/tmp/${{ github.event.repository.name }}-${{ env.SERVICE_NAME }}:${{ github.sha }}.tar"
+            
+          echo "image_tag=${image_tag}" >> ${GITHUB_OUTPUT}          
+          echo "image_name=${image_name}" >> ${GITHUB_OUTPUT}          
+          echo "tagged_image_previous=${tagged_image_previous}" >> ${GITHUB_OUTPUT}
+          echo "image_tar_filename=${image_tar_filename}" >> ${GITHUB_OUTPUT}
 
 
   build:
@@ -60,7 +70,19 @@ jobs:
       id: docker_build
       uses: docker/build-push-action@v5
       with:
-        context: alpha
+        context: ${{ env.SERVICE_NAME }}
         push: true
         tags: ${{ needs.setup.outputs.image_name }}
+        cache-from: type=registry,ref=${{ needs.setup.outputs.tagged_image_previous }}
+        cache-to: type=inline,mode=max
 
+    - name: Tar Docker image
+      run: |
+        docker pull ${{ needs.setup.outputs.image_name }}          
+        docker image save ${{ needs.setup.outputs.image_name }} --output ${{ needs.setup.outputs.image_tar_filename }}
+
+    - name: Cache Docker image
+      uses: actions/cache@v4.0.0
+      with:
+        path: ${{ needs.setup.outputs.image_tar_filename }}
+        key: ${{ needs.setup.outputs.image_name }}
