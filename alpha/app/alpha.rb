@@ -7,4 +7,8 @@ class Alpha < Sinatra::Base
   get '/' do
     'Alpha'
   end
+
+  get '/ready' do
+    true
+  end
 end
