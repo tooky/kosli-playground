@@ -1,0 +1,17 @@
+services:
+  alpha:
+    build: alpha
+    ports:
+      - 4500:4500
+    develop:
+      watch:
+        - action: rebuild
+          path: alpha
+  beta:
+    build: beta
+    ports:
+      - 4501:4501
+    develop:
+      watch:
+        - action: rebuild
+          path: beta
