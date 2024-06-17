@@ -36,8 +36,9 @@ RUN apk add --update --upgrade --virtual build-dependencies build-base \
 COPY --chown=nobody:nogroup . .
 
 ENV ALPHA_PORT=4500
+EXPOSE 4500
+
 USER nobody
 HEALTHCHECK --interval=1s --timeout=1s --retries=5 --start-period=5s CMD ./config/healthcheck.sh
 ENTRYPOINT [ "/sbin/tini", "-g", "--" ]
 CMD [ "/app/config/up.sh" ]
-EXPOSE 4500
