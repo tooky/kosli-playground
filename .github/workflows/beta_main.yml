@@ -85,3 +85,18 @@ jobs:
       with:
         path: ${{ needs.setup.outputs.image_tar_filename }}
         key: ${{ needs.setup.outputs.image_name }}
+
+
+  lint:
+    name: Run rubocop linter
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4.1.1
+      with:
+        fetch-depth: 1
+
+    - name: Run Rubocop linter on source
+      run: |
+        cd "${{ env.SERVICE_NAME }}"        
+        make lint
+  
