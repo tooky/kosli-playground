@@ -10,8 +10,8 @@ on:
 env:
   DOCKER_REGISTRY: ghcr.io
   GITHUB_ORG_NAME: kosli-dev
-  DOCKER_USERNAME: ${{ secrets.ghcr_user }}
-  DOCKER_PASSWORD: ${{ secrets.ghcr_token }}
+  DOCKER_USERNAME: ${{ github.actor }}
+  DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
   SERVICE_NAME: alpha
 
 
