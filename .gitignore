@@ -1,2 +1,5 @@
 .idea/
 .tool-versions
+alpha/test/reports/*
+alpha/test/reports/.*
+**/.DS_Store
