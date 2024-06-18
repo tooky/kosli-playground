@@ -20,7 +20,7 @@ RUN apk add c-ares=1.27.0-r0   # https://security.snyk.io/vuln/SNYK-ALPINE319-CA
 RUN apk add busybox=1.36.1-r19 # https://security.snyk.io/vuln/SNYK-ALPINE319-BUSYBOX-6928846
 RUN apk upgrade
 
-WORKDIR /alpha
+WORKDIR /app
 COPY Gemfile .
 
 RUN apk add --update --upgrade --virtual build-dependencies build-base \
@@ -35,6 +35,8 @@ RUN apk add --update --upgrade --virtual build-dependencies build-base \
 
 COPY --chown=nobody:nogroup app app
 COPY --chown=nobody:nogroup config config
+
+RUN ln -s /app /alpha
 
 ENV ALPHA_PORT=4500
 EXPOSE 4500
