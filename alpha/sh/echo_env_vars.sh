@@ -2,7 +2,6 @@
 # - - - - - - - - - - - - - - - - - - - - - - - -
 echo_env_vars()
 {
-  echo ALPHA_PORT=4500
-  echo ALPHA_USER=nobody
-  echo ALPHA_CONTAINER_NAME=alpha_server
+  local -r root_dir="$(git rev-parse --show-toplevel)"
+  cat "${root_dir}/.env"
 }

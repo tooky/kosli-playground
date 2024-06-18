@@ -11,19 +11,6 @@ server_up_healthy_and_clean()
 }
 
 # - - - - - - - - - - - - - - - - - - -
-#client_up_healthy_and_clean()
-#{
-#  if [ "${1:-}" != server ]; then
-#    export SERVICE_NAME=differ_client
-#    export CONTAINER_NAME="${ALPHA_CONTAINER_NAME}"
-#    export CONTAINER_PORT="${ALPHA_PORT}"
-#    docker compose up --detach "${SERVICE_NAME}"
-#    exit_non_zero_unless_healthy
-#    exit_non_zero_unless_started_cleanly
-#  fi
-#}
-
-# - - - - - - - - - - - - - - - - - - -
 exit_non_zero_unless_healthy()
 {
   echo

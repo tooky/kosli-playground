@@ -18,8 +18,10 @@ services:
           target: /static
 
   alpha:
+    build:
+      context: alpha
+    image: ${ALPHA_IMAGE}
     container_name: ${ALPHA_CONTAINER_NAME}
-    build: alpha
     env_file: [ .env ]
     read_only: true
     restart: "no"
@@ -31,17 +33,20 @@ services:
           mode: 01777
           size: 10485760  # 10MB
     ports:
-      - 4500:4500
+      - ${ALPHA_PORT}:${ALPHA_PORT}
     develop:
       watch:
         - action: rebuild
           path: ./alpha
 
   beta:
+    build:
+      context: beta
+    image: ${BETA_IMAGE}
     container_name: ${BETA_CONTAINER_NAME}
-    build: beta
+    env_file: [ .env ]
     ports:
-      - 4501:4501
+      - ${BETA_PORT}:${BETA_PORT}
     develop:
       watch:
         - action: rebuild

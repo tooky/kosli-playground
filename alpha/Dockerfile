@@ -33,7 +33,8 @@ RUN apk add --update --upgrade --virtual build-dependencies build-base \
              /tmp/* \
              /var/tmp/*
 
-COPY --chown=nobody:nogroup . .
+COPY --chown=nobody:nogroup app app
+COPY --chown=nobody:nogroup config config
 
 ENV ALPHA_PORT=4500
 EXPOSE 4500
