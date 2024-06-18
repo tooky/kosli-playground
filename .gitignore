@@ -2,4 +2,6 @@
 .tool-versions
 alpha/test/reports/*
 alpha/test/reports/.*
+beta/test/reports/*
+beta/test/reports/.*
 **/.DS_Store

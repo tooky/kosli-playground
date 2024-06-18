@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeu
 
-export ROOT_DIR="$(git rev-parse --show-toplevel)/alpha"
+export ROOT_DIR="$(git rev-parse --show-toplevel)/beta"
 export SH_DIR="${ROOT_DIR}/sh"
 
 source "${SH_DIR}/containers_up_healthy_and_clean.sh"
