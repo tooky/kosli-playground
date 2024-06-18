@@ -17,8 +17,6 @@ test_in_containers()
   local -r CONTAINER_COVERAGE_DIR="${CONTAINER_TMP_DIR}/reports"
   local -r TEST_LOG=test.log
 
-  # rm -rf "${CONTAINER_COVERAGE_DIR}" || true
-
   set +e
   docker exec \
     --env COVERAGE_CODE_TAB_NAME=${COVERAGE_CODE_TAB_NAME} \
