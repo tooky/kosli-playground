@@ -6,9 +6,13 @@
   "scripts": {
     "dev": "npx vite",
     "build": "npx vite build",
-    "preview": "npx vite preview"
+    "preview": "npx vite preview",
+    "test": "npx vitest",
+    "coverage": "npx vitest run --coverage"
   },
   "devDependencies": {
-    "vite": "^5.2.0"
+    "@vitest/coverage-v8": "^1.6.0",
+    "vite": "^5.2.0",
+    "vitest": "^1.6.0"
   }
 }
