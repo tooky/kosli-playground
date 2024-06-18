@@ -62,3 +62,4 @@ services:
       - "4502:4502"
     volumes:
       - ./webapp:/app
+      - /app/node_modules

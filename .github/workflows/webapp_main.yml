@@ -27,9 +27,9 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4.1.1
     - name: build image
-      run: docker build . -t playground/webapp
+      run: docker compose build webapp
     - name: run tests and coverage
-      run: docker run --rm -v $(pwd):/app playground/webapp coverage
+      run: docker compose run coverage
     - name: build site
-      run: docker run --rm -v $(pwd):/app playground/webapp build
+      run: docker compose run build
 
