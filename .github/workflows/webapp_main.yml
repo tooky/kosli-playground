@@ -1,0 +1,34 @@
+name: Build and test webapp on main
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - webapp/**
+      - .github/workflows/webapp_main.yml
+
+
+env:
+  SERVICE_NAME: webapp
+
+
+jobs:
+
+  build:
+    name: Build docker image and push it to registry
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: ${{ env.SERVICE_NAME }}
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4.1.1
+    - name: build image
+      run: docker build . -t playground/webapp
+    - name: build site
+      run: docker run --rm -v $(pwd):/app -it playground/webapp build
+
