@@ -18,6 +18,6 @@ require '${MY_DIR}/coverage.rb'
 export RUBYOPT='-W2'
 mkdir -p ${COVERAGE_ROOT}
 
-set +e
 ruby -e "${SCRIPT}" -- ${TEST_ARGS[@]} 2>&1 | tee ${COVERAGE_ROOT}/${TEST_LOG}
-set -e
+grep -q "0 failures, 0 errors" ${COVERAGE_ROOT}/${TEST_LOG}
+

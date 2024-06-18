@@ -1,30 +1,11 @@
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
 test_in_containers()
 {
-  local exit_code=0
-  run_server_tests "${@:-}" || exit_code=$?
-  return ${exit_code}
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
-run_server_tests()
-{
-  run_tests \
-    "${ALPHA_USER}" \
-    "${ALPHA_CONTAINER_NAME}" \
-    server "${@:-}"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - -
-run_tests()
-{
-  local -r USER="${1}"           # eg nobody
-  local -r CONTAINER_NAME="${2}" # eg beta_server
-  local -r TYPE="${3}"           # eg server
+  local -r USER="${BETA_USER}"                     # eg nobody
+  local -r CONTAINER_NAME="${BETA_CONTAINER_NAME}" # eg beta_server
 
   echo '=================================='
-  echo "Running ${TYPE} tests"
+  echo "Running beta tests"
   echo '=================================='
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -42,7 +23,7 @@ run_tests()
     --env COVERAGE_TEST_TAB_NAME=${COVERAGE_TEST_TAB_NAME} \
     --user "${USER}" \
     "${CONTAINER_NAME}" \
-      sh -c "/app/test/lib/run.sh ${CONTAINER_COVERAGE_DIR} ${TEST_LOG} ${*:4}"
+      sh -c "/app/test/lib/run.sh ${CONTAINER_COVERAGE_DIR} ${TEST_LOG} ${*:3}"
 
   local -r STATUS=$?
   set -e
@@ -51,11 +32,7 @@ run_tests()
   # Extract test-run results and coverage data from the container.
   # You can't [docker cp] from a tmpfs, so tar-piping coverage out
 
-  if [ "${TYPE}" = server ]; then
-    local -r HOST_TEST_DIR="${ROOT_DIR}/test"
-  else
-    local -r HOST_TEST_DIR="${ROOT_DIR}/client/test"
-  fi
+  local -r HOST_TEST_DIR="${ROOT_DIR}/test"
 
   docker exec \
     "${CONTAINER_NAME}" \
@@ -69,9 +46,9 @@ run_tests()
   local -r HOST_REPORTS_DIR="${HOST_TEST_DIR}/reports"
   mkdir -p "${HOST_REPORTS_DIR}"
 
-  echo "${TYPE} test branch-coverage report is at"
+  echo "beta test branch-coverage report is at"
   echo "${HOST_REPORTS_DIR}/index.html"
-  echo "${TYPE} test status == ${STATUS}"
+  echo "beta test status == ${STATUS}"
   echo
   if [ "${STATUS}" != 0 ]; then
     echo Docker logs "${CONTAINER_NAME}"
