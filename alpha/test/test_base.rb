@@ -7,13 +7,8 @@ require 'minitest/ci'
 Minitest::Ci.report_dir = "#{ENV.fetch('COVERAGE_ROOT')}/junit"
 
 def require_app(required)
-  require_relative "../../app/#{required}"
+  require_relative "../code/#{required}"
 end
 
-class ReadyTest < Minitest::Test
-
-  def test_ready
-    assert_equal 1, 1
-  end
-
+class TestBase < Minitest::Test
 end

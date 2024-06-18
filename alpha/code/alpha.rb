@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'sinatra'
+require_relative 'prober'
 
 # Example monorepo micro-service
 class Alpha < Sinatra::Base
@@ -9,6 +10,6 @@ class Alpha < Sinatra::Base
   end
 
   get '/ready' do
-    true
+    Prober.new.ready?
   end
 end

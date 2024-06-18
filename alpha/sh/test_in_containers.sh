@@ -30,7 +30,7 @@ run_tests()
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Run tests (with branch coverage) inside the container.
 
-  local -r COVERAGE_CODE_TAB_NAME=app
+  local -r COVERAGE_CODE_TAB_NAME=code
   local -r COVERAGE_TEST_TAB_NAME=test
   local -r CONTAINER_TMP_DIR=/tmp # fs is read-only with tmpfs at /tmp
   local -r CONTAINER_COVERAGE_DIR="${CONTAINER_TMP_DIR}/reports"
@@ -42,7 +42,7 @@ run_tests()
     --env COVERAGE_TEST_TAB_NAME=${COVERAGE_TEST_TAB_NAME} \
     --user "${USER}" \
     "${CONTAINER_NAME}" \
-      sh -c "/alpha/test/lib/run.sh ${CONTAINER_COVERAGE_DIR} ${TEST_LOG} ${*:4}"
+      sh -c "/app/test/lib/run.sh ${CONTAINER_COVERAGE_DIR} ${TEST_LOG} ${*:4}"
 
   local -r STATUS=$?
   set -e

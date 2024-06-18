@@ -4,7 +4,7 @@ set -Eeu
 export ROOT_DIR="$(git rev-parse --show-toplevel)/alpha"
 export SH_DIR="${ROOT_DIR}/sh"
 
-#source "${SH_DIR}/containers_down.sh"
+source "${SH_DIR}/containers_down.sh"
 source "${SH_DIR}/containers_up_healthy_and_clean.sh"
 source "${SH_DIR}/test_in_containers.sh"
 source "${SH_DIR}/echo_env_vars.sh"

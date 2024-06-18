@@ -33,10 +33,8 @@ RUN apk add --update --upgrade --virtual build-dependencies build-base \
              /tmp/* \
              /var/tmp/*
 
-COPY --chown=nobody:nogroup app app
+COPY --chown=nobody:nogroup code code
 COPY --chown=nobody:nogroup config config
-
-RUN ln -s /app /alpha
 
 ENV ALPHA_PORT=4500
 EXPOSE 4500
@@ -44,4 +42,4 @@ EXPOSE 4500
 USER nobody
 HEALTHCHECK --interval=1s --timeout=1s --retries=5 --start-period=5s CMD ./config/healthcheck.sh
 ENTRYPOINT [ "/sbin/tini", "-g", "--" ]
-CMD [ "/alpha/config/up.sh" ]
+CMD [ "/app/config/up.sh" ]
