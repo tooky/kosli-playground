@@ -14,8 +14,8 @@ env:
 
 
 jobs:
-  prepare:
-    name: Get docker image for builder
+  test_and_build:
+    name: Run tests and build distribution
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -24,40 +24,12 @@ jobs:
         working-directory: ${{ env.SERVICE_NAME }}
 
     steps:
-      - name: checkout
-        uses: actions/checkout@v4.1.1
-      - name: build image
-        run: docker build . -t playground/webapp
-
-  test:
-    name: Run tests and generate coverage
-    needs: ["prepare"]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    defaults:
-      run:
-        working-directory: ${{ env.SERVICE_NAME }}
-
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4.1.1
-      - name: run tests
-        run: docker run --rm -v $(pwd):/app playground/webapp coverage
-
-  build:
-    name: Build docker image and push it to registry
-    needs: ["prepare"]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    defaults:
-      run:
-        working-directory: ${{ env.SERVICE_NAME }}
-
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4.1.1
-      - name: build site
-        run: docker run --rm -v $(pwd):/app playground/webapp build
+    - name: checkout
+      uses: actions/checkout@v4.1.1
+    - name: build image
+      run: docker build . -t playground/webapp
+    - name: run tests and coverage
+      run: docker run --rm -v $(pwd):/app playground/webapp coverage
+    - name: build site
+      run: docker run --rm -v $(pwd):/app playground/webapp build
 
