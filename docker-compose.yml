@@ -58,8 +58,8 @@ services:
           path: ./beta
   webapp:
     build: webapp
-    ports:
-      - "4502:4502"
+    env_file: [ .env ]
+    ports: [ "${WEBAPP_PORT}:${WEBAPP_PORT}" ]
     volumes:
       - ./webapp:/app
       - /app/node_modules
