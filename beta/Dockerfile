@@ -36,9 +36,6 @@ RUN apk add --update --upgrade --virtual build-dependencies build-base \
 COPY --chown=nobody:nogroup code code
 COPY --chown=nobody:nogroup config config
 
-ENV BETA_PORT=4501
-EXPOSE 4501
-
 USER nobody
 HEALTHCHECK --interval=1s --timeout=1s --retries=5 --start-period=5s CMD ./config/healthcheck.sh
 ENTRYPOINT [ "/sbin/tini", "-g", "--" ]

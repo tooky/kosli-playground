@@ -15,10 +15,12 @@ services:
 
   alpha:
     build:
-      context: alpha
+      context: ./alpha
     image: ${ALPHA_IMAGE}
     container_name: ${ALPHA_CONTAINER_NAME}
+    user: ${ALPHA_USER}
     env_file: [ .env ]
+    ports: [ "${ALPHA_PORT}:${ALPHA_PORT}" ]
     read_only: true
     restart: "no"
     volumes:
@@ -28,8 +30,6 @@ services:
         tmpfs:
           mode: 01777
           size: 10485760  # 10MB
-    ports:
-      - ${ALPHA_PORT}:${ALPHA_PORT}
     develop:
       watch:
         - action: rebuild
@@ -37,10 +37,12 @@ services:
 
   beta:
     build:
-      context: beta
+      context: ./beta
     image: ${BETA_IMAGE}
     container_name: ${BETA_CONTAINER_NAME}
+    user: ${BETA_USER}
     env_file: [ .env ]
+    ports: [ "${BETA_PORT}:${BETA_PORT}" ]
     read_only: true
     restart: "no"
     volumes:
@@ -50,8 +52,6 @@ services:
         tmpfs:
           mode: 01777
           size: 10485760  # 10MB
-    ports:
-      - ${BETA_PORT}:${BETA_PORT}
     develop:
       watch:
         - action: rebuild
