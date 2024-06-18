@@ -29,7 +29,7 @@ jobs:
     - name: build image
       run: docker compose build webapp
     - name: run tests and coverage
-      run: docker compose run coverage
+      run: docker compose run webapp coverage
     - name: build site
-      run: docker compose run build
+      run: docker compose run webapp build
 
