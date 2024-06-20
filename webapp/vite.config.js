@@ -3,8 +3,9 @@ export default {
     host: true,
     port: 4502
   },
-  test: {
-    reporters: ['junit', 'default'],
-    outputFile: './junit-report.xml'
-  },
+  // uncomment this to get JUnit XML
+  // test: {
+  //   reporters: ['junit', 'default'],
+  //   outputFile: './junit-report.xml'
+  // },
 }
