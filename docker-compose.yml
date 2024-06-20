@@ -4,8 +4,8 @@ services:
     container_name: nginx
     restart: always
     ports:
-      - "4580:80"
-      - "4581:1080"
+      - "4580:80"   # 'production-like'
+      - "4581:1080" # dev
     volumes:
       - ./reverse-proxy:/etc/nginx/conf.d/
       - ./webapp/dist:/dist
