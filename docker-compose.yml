@@ -5,8 +5,10 @@ services:
     restart: always
     ports:
       - "4580:80"
-    volumes: 
+      - "4581:1080"
+    volumes:
       - ./reverse-proxy:/etc/nginx/conf.d/
+      - ./webapp/dist:/dist
     develop:
       watch:
         - action: sync+restart
