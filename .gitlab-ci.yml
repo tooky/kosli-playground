@@ -1,19 +1,28 @@
-include:
-    - local: ci/webapp.gitlab-ci.yml
-      rules:
-        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-          changes:
-            - webapp/**/*
-            - ci/webapp.gitlab-ci.yml
-    - local: ci/alpha.gitlab-ci.yml
-      rules:
-        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-          changes:
-            - alpha/**/*
-            - ci/alpha.gitlab-ci.yml
-    - local: ci/beta.gitlab-ci.yml
-      rules:
-        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-          changes:
-            - beta/**/*
-            - ci/beta.gitlab-ci.yml
+stages:
+  - triggers
+
+trigger_alpha:
+  stage: triggers
+  trigger:
+    include: alpha/.gitlab-ci.yml
+  rules:
+      changes:
+        - alpha/**/*
+
+trigger_beta:
+  stage: triggers
+  trigger:
+    include: beta/.gitlab-ci.yml
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes:
+        - beta/**/*
+
+trigger_webapp:
+  stage: triggers
+  trigger:
+    include: webapp/.gitlab-ci.yml
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes:
+        - webapp/**/*
