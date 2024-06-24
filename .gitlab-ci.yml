@@ -5,18 +5,15 @@ include:
           changes:
             - webapp/**/*
             - ci/webapp.gitlab-ci.yml
-    - local: ci/webapp.gitlab-ci.yml
+    - local: ci/alpha.gitlab-ci.yml
       rules:
         - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
           changes:
-            - webapp/**/*
-            - ci/webapp.gitlab-ci.yml
-    - local: ci/webapp.gitlab-ci.yml
+            - alpha/**/*
+            - ci/alpha.gitlab-ci.yml
+    - local: ci/beta.gitlab-ci.yml
       rules:
         - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
           changes:
-            - webapp/**/*
-            - ci/webapp.gitlab-ci.yml
-#   - local: ci/b.gitlab-ci.yml
-#     rules:
-#       - if: $CI_COMMIT_TITLE !~ /-deploy$/
+            - beta/**/*
+            - ci/beta.gitlab-ci.yml
