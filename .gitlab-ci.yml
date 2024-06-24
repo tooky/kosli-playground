@@ -6,6 +6,7 @@ trigger_alpha:
   trigger:
     include: alpha/.gitlab-ci.yml
   rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
         - alpha/**/*
 
