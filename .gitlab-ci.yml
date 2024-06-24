@@ -1,0 +1,22 @@
+include:
+    - local: ci/webapp.gitlab-ci.yml
+      rules:
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+          changes:
+            - webapp/**/*
+            - ci/webapp.gitlab-ci.yml
+    - local: ci/webapp.gitlab-ci.yml
+      rules:
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+          changes:
+            - webapp/**/*
+            - ci/webapp.gitlab-ci.yml
+    - local: ci/webapp.gitlab-ci.yml
+      rules:
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+          changes:
+            - webapp/**/*
+            - ci/webapp.gitlab-ci.yml
+#   - local: ci/b.gitlab-ci.yml
+#     rules:
+#       - if: $CI_COMMIT_TITLE !~ /-deploy$/
