@@ -1,9 +1,14 @@
-build-job:
+default:
+  image: docker:26.1.4
+  services:
+    - docker:26.1.4-dind
+  before_script:
+    - apk add make
+    - cd alpha/
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+
+build:
   stage: build
   script:
-    - echo "Hello, $GITLAB_USER_LOGIN!"
-
-test-job1:
-  stage: test
-  script:
-    - echo "This job is Alpha!"
+    - docker build -t ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}-alpha:${CI_COMMIT_SHORT_SHA} .
+    - docker push ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}-alpha:${CI_COMMIT_SHORT_SHA}
