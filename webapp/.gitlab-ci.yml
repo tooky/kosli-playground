@@ -23,4 +23,5 @@ variables:
 build:
   stage: build
   script:
-    - make build
+    - cd webapp/
+    - docker compose build webapp
