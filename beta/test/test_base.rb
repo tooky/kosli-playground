@@ -4,7 +4,6 @@ require 'English'
 require 'minitest/autorun'
 require 'minitest/ci'
 
-# uncomment this to get JUnit XML
 Minitest::Ci.report_dir = "#{ENV.fetch('COVERAGE_ROOT')}/junit"
 
 def require_app(required)
