@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -Eeu
 
+# brew install act
+#   when running act for the first time, select Medium
+
 # gh auth login --scopes=write:packages
 #  > GitHub.com
 #  > I want to re-authenticate   (y)
