@@ -60,6 +60,9 @@ jobs:
       with:
         fetch-depth: 1
 
+#    - name: Set up QEMU
+#      uses: docker/setup-qemu-action@v3
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
@@ -75,6 +78,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: ${{ env.SERVICE_NAME }}
+        # platforms: linux/amd64,linux/arm64
         push: true
         tags: ${{ needs.setup.outputs.image_name }},${{ needs.setup.outputs.tagged_image_previous }}
         cache-from: type=registry,ref=${{ needs.setup.outputs.tagged_image_previous }}
@@ -129,7 +133,8 @@ jobs:
     - name: Create a Snapshot
       run: |
         docker pull ${{ needs.setup.outputs.image_name }}
-        kosli snapshot docker docker
+        KOSLI_ENVIRONMENT=docker
+        kosli snapshot docker "${KOSLI_ENVIRONMENT}"
         # Error message (from kosli CLI) says...
         # ignoring container 'alpha_server' as it uses an image with no repo digest
         # Yet...
@@ -137,3 +142,5 @@ jobs:
         # Says...
         #  ghcr.io/kosli-dev/playground-alpha@sha256:1cda5fd7ae473429d91ab7334c92ed4bdd9e5b6551d2f8377b339c438206caa0
         # Why does the Kosli CLI think there is no repo digest?
+        # Is it because of multi-architecture?
+        # On a real CI run, the host OS is presumably amd64, on my macbook it is presumably arm64 ? 
