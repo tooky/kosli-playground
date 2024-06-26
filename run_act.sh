@@ -19,3 +19,7 @@ set -Eeu
 ./bin/act \
   --secret=GITHUB_TOKEN="$(gh auth token)" \
   --secret-file=.act.secrets
+
+
+# To uninstall act
+# rm -rf "~/Library/Application Support/act"
