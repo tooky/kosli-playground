@@ -10,5 +10,5 @@ default:
 build:
   stage: build
   script:
-    - docker build -t ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}-alpha:${CI_COMMIT_SHORT_SHA} .
-    - docker push ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}-alpha:${CI_COMMIT_SHORT_SHA}
+    - docker build -t ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/alpha:${CI_COMMIT_SHORT_SHA} .
+    - docker push ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/alpha:${CI_COMMIT_SHORT_SHA}
