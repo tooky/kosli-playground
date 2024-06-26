@@ -120,7 +120,7 @@ jobs:
         docker pull ${{ needs.setup.outputs.image_name }}
         docker compose up --wait
 
-    - name: Setup kosli cli
+    - name: Setup Kosli cli
       uses: kosli-dev/setup-cli-action@v2
       with:
         version:
