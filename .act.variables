@@ -8,3 +8,5 @@ KOSLI_CLI_VERSION=2.10.8
 REPO_NAME=playground
 # Set this to your docker org name
 DOCKER_ORG_NAME=kosli-dev
+# Set this to your docker registry
+DOCKER_REGISTRY=ghcr.io

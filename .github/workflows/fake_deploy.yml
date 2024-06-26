@@ -1,4 +1,4 @@
-name: Build and test alpha on main
+name: alpha on main
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 
 env:
-  DOCKER_REGISTRY: ghcr.io
+  DOCKER_REGISTRY: ${{ vars.DOCKER_REGISTRY }}
   DOCKER_ORG_NAME: ${{ vars.DOCKER_ORG_NAME }}
   DOCKER_USERNAME: ${{ github.actor }}
   DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
@@ -92,19 +92,20 @@ jobs:
         key: ${{ needs.setup.outputs.image_name }}
 
 
-#  lint:
-#    name: Run rubocop linter
-#    runs-on: ubuntu-latest
-#    steps:
-#    - uses: actions/checkout@v4.1.1
-#      with:
-#        fetch-depth: 1
-#
-#    - name: Run Rubocop linter on source
-#      run: |
-#        cd "${{ env.SERVICE_NAME }}"
-#        make lint
-#
+  lint:
+    name: Run rubocop linter
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4.1.1
+      with:
+        fetch-depth: 1
+
+    - name: Run Rubocop linter on source
+      run: |
+        cd "${{ env.SERVICE_NAME }}"
+        make lint
+
 
   deploy:
     runs-on: ubuntu-latest
@@ -128,8 +129,10 @@ jobs:
     - name: Create a Snapshot
       run: |
         kosli snapshot docker docker
+        # Error message (from kosli CLI) says...
         # ignoring container 'alpha_server' as it uses an image with no repo digest
         # Yet...
         #  $ docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/kosli-dev/playground-alpha:$(git rev-parse --short=7 HEAD)
         # Says...
         #  ghcr.io/kosli-dev/playground-alpha@sha256:1cda5fd7ae473429d91ab7334c92ed4bdd9e5b6551d2f8377b339c438206caa0
+        # Why does the Kosli CLI think there is no repo digest?
