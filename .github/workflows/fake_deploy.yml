@@ -80,16 +80,16 @@ jobs:
         cache-from: type=registry,ref=${{ needs.setup.outputs.tagged_image_previous }}
         cache-to: type=inline,mode=max
 
-#    - name: Tar Docker image
-#      run: |
-#        docker pull ${{ needs.setup.outputs.image_name }}
-#        docker image save ${{ needs.setup.outputs.image_name }} --output ${{ needs.setup.outputs.image_tar_filename }}
-#
-#    - name: Cache Docker image
-#      uses: actions/cache@v4.0.0
-#      with:
-#        path: ${{ needs.setup.outputs.image_tar_filename }}
-#        key: ${{ needs.setup.outputs.image_name }}
+    - name: Tar Docker image
+      run: |
+        docker pull ${{ needs.setup.outputs.image_name }}
+        docker image save ${{ needs.setup.outputs.image_name }} --output ${{ needs.setup.outputs.image_tar_filename }}
+
+    - name: Cache Docker image
+      uses: actions/cache@v4.0.0
+      with:
+        path: ${{ needs.setup.outputs.image_tar_filename }}
+        key: ${{ needs.setup.outputs.image_name }}
 
 
 #  lint:
@@ -129,3 +129,7 @@ jobs:
       run: |
         kosli snapshot docker docker
         # ignoring container 'alpha_server' as it uses an image with no repo digest
+        # Yet...
+        #  $ docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/kosli-dev/playground-alpha:$(git rev-parse --short=7 HEAD)
+        # Says...
+        #  ghcr.io/kosli-dev/playground-alpha@sha256:1cda5fd7ae473429d91ab7334c92ed4bdd9e5b6551d2f8377b339c438206caa0
