@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 set -Eeu
 
+# Script to run github CI pipelines locally using act
+# https://github.com/nektos/act
+
 # brew install act
 #   when running act for the first time, select Medium
+
+# Install gh
 
 # gh auth login --scopes=write:packages
 #  > GitHub.com
