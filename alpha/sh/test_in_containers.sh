@@ -13,8 +13,7 @@ test_in_containers()
 
   local -r COVERAGE_CODE_TAB_NAME=code
   local -r COVERAGE_TEST_TAB_NAME=test
-  local -r CONTAINER_TMP_DIR=/tmp # fs is read-only with tmpfs at /tmp
-  local -r CONTAINER_COVERAGE_DIR="${CONTAINER_TMP_DIR}/reports"
+  local -r CONTAINER_COVERAGE_DIR="/app/test/reports"
   local -r TEST_LOG=test.log
 
   set +e
@@ -28,18 +27,7 @@ test_in_containers()
   local STATUS=$?
   set -e
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Extract test-run results and coverage data from the container.
-  # You can't [docker cp] from a tmpfs, so tar-piping coverage out
-
   local -r HOST_TEST_DIR="${ROOT_DIR}/test"
-
-  docker exec \
-    "${CONTAINER_NAME}" \
-    tar Ccf \
-      "$(dirname "${CONTAINER_COVERAGE_DIR}")" \
-      - "$(basename "${CONTAINER_COVERAGE_DIR}")" \
-        | tar Cxf "${HOST_TEST_DIR}/" -
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Tell caller where the test results are...
