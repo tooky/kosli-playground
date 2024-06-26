@@ -1,5 +1,6 @@
 .idea/
 .tool-versions
+bin/
 alpha/test/reports/*
 alpha/test/reports/.*
 beta/test/reports/*

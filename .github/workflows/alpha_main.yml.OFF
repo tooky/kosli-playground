@@ -14,6 +14,7 @@ env:
   DOCKER_ORG_NAME: kosli-dev
   DOCKER_USERNAME: ${{ github.actor }}
   DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+  REPO_NAME: playground
   SERVICE_NAME: alpha
 
 
@@ -32,10 +33,10 @@ jobs:
         id: variables
         run: |
           image_tag="${GITHUB_SHA:0:7}"
-          image_uri="${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_ORG_NAME }}/${{ github.event.repository.name }}-${{ env.SERVICE_NAME }}"
+          image_uri="${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_ORG_NAME }}/${{ env.REPO_NAME }}-${{ env.SERVICE_NAME }}"
           image_name="${image_uri}:${image_tag}"
           tagged_image_previous="${image_uri}:previous"
-          image_tar_filename="/tmp/${{ github.event.repository.name }}-${{ env.SERVICE_NAME }}:previous.tar"            
+          image_tar_filename="/tmp/${{ env.REPO_NAME }}-${{ env.SERVICE_NAME }}:previous.tar"            
           echo "image_tag=${image_tag}" >> ${GITHUB_OUTPUT}          
           echo "image_name=${image_name}" >> ${GITHUB_OUTPUT}          
           echo "tagged_image_previous=${tagged_image_previous}" >> ${GITHUB_OUTPUT}
@@ -59,33 +60,34 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ${{ env.DOCKER_REGISTRY }}
-        username: ${{ env.DOCKER_USERNAME }}
-        password: ${{ env.DOCKER_PASSWORD }}
+#    - name: Login to GitHub Container Registry
+#      uses: docker/login-action@v3
+#      with:
+#        registry: ${{ env.DOCKER_REGISTRY }}
+#        username: ${{ env.DOCKER_USERNAME }}
+#        password: ${{ env.DOCKER_PASSWORD }}
 
     - name: Build and push Docker image to the GHCR
       id: docker_build
       uses: docker/build-push-action@v5
       with:
         context: ${{ env.SERVICE_NAME }}
-        push: true
+        #push: true
+        push: false
         tags: ${{ needs.setup.outputs.image_name }},${{ needs.setup.outputs.tagged_image_previous }}
         cache-from: type=registry,ref=${{ needs.setup.outputs.tagged_image_previous }}
         cache-to: type=inline,mode=max
 
-    - name: Tar Docker image
-      run: |
-        docker pull ${{ needs.setup.outputs.image_name }}          
-        docker image save ${{ needs.setup.outputs.image_name }} --output ${{ needs.setup.outputs.image_tar_filename }}
-
-    - name: Cache Docker image
-      uses: actions/cache@v4.0.0
-      with:
-        path: ${{ needs.setup.outputs.image_tar_filename }}
-        key: ${{ needs.setup.outputs.image_name }}
+#    - name: Tar Docker image
+#      run: |
+#        docker pull ${{ needs.setup.outputs.image_name }}
+#        docker image save ${{ needs.setup.outputs.image_name }} --output ${{ needs.setup.outputs.image_tar_filename }}
+#
+#    - name: Cache Docker image
+#      uses: actions/cache@v4.0.0
+#      with:
+#        path: ${{ needs.setup.outputs.image_tar_filename }}
+#        key: ${{ needs.setup.outputs.image_name }}
 
 
   lint:
@@ -101,3 +103,9 @@ jobs:
         cd "${{ env.SERVICE_NAME }}"        
         make lint
         
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Fake it
+      run: docker compose up
