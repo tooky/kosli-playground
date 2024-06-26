@@ -128,6 +128,7 @@ jobs:
 
     - name: Create a Snapshot
       run: |
+        docker pull ${{ needs.setup.outputs.image_name }}
         kosli snapshot docker docker
         # Error message (from kosli CLI) says...
         # ignoring container 'alpha_server' as it uses an image with no repo digest
