@@ -13,7 +13,7 @@ set -Eeu
 # $ brew install act
 
 # If you install using the bash command provided at https://nektosact.com/installation/index.html#bash-script
-#   curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+# Viz:  curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
 # Then to uninstall act on a MacBook I had to do this:
 # rm -rf "~/Library/Application Support/act"
 
@@ -45,13 +45,13 @@ set -Eeu
 
 exit_non_zero_unless_installed()
 {
-  for dependent in "$@"
-  do
-    if ! installed "${dependent}" ; then
-      stderr "${dependent}" is not installed
-      exit 42
-    fi
-  done
+  local -r dependent="${1}"
+  local -r url="${2}"
+  if ! installed "${dependent}" ; then
+    stderr "${dependent} is not installed!"
+    stderr "Installation instructions are here: ${url}"
+    exit 42
+  fi
 }
 
 installed()
@@ -73,9 +73,30 @@ stderr()
   >&2 echo "ERROR: ${message}"
 }
 
-exit_non_zero_unless_installed docker act gh
+exit_non_zero_unless_installed docker https://docs.docker.com/engine/install/
+exit_non_zero_unless_installed act    https://nektosact.com/installation/index.html
+exit_non_zero_unless_installed gh     https://github.com/cli/cli#installation
+
+# https://stackoverflow.com/questions/68772807/check-scopes-of-github-token
+GITHUB_TOKEN=$(gh auth token)
+set +e
+curl -sS -f -I -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com \
+  | grep ^x-oauth-scopes: \
+  | cut -d' ' -f2- \
+  | tr -d "[:space:]" \
+  | tr ',' '\n' \
+  | grep -q write:packages
+STATUS=$?
+set -e
+
+if [ "${STATUS}" != "0" ]; then
+  stderr "Your GITHUB_TOKEN does not have 'write:packages' scope."
+  stderr "You can reset a token's scopes with the command:"
+  stderr "$ gh auth login --scopes=write:packages"
+  exit 42
+fi
 
 act \
-  --secret=GITHUB_TOKEN="$(gh auth token)" \
+  --secret=GITHUB_TOKEN="${GITHUB_TOKEN}" \
   --secret-file=.act.secrets \
   --var-file=.act.variables
