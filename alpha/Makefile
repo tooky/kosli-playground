@@ -2,7 +2,7 @@
 image:
 	docker compose build alpha
 
-test:
+test: image
 	./sh/run_tests_with_coverage.sh
 
 lint:

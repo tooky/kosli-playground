@@ -144,3 +144,9 @@ jobs:
         # Why does the Kosli CLI think there is no repo digest?
         # Is it because of multi-architecture?
         # On a real CI run, the host OS is presumably amd64, on my macbook it is presumably arm64 ? 
+        #  $ docker inspect --format='{{index .RepoDigests}}' ghcr.io/kosli-dev/playground-alpha:$(git rev-parse --short=7 HEAD)
+        # Says...
+        # [ghcr.io/kosli-dev/playground-alpha@sha256:839701533965dfdc4b50990fecccbe52c2df23d91dc1e7b47072052e0653fdb2 
+        #  ghcr.io/kosli-dev/playground-alpha@sha256:c0bf7dfd12e5545dec6bcad09611b77d3b2d7a53dd2e780a2942a032b38976c7 
+        #  ghcr.io/kosli-dev/playground-alpha@sha256:cce82fabee1c092de1b7003de1fbabed0502e2dcfe86973d5a4572ff86394132]
+        # Why are there three?
