@@ -131,16 +131,21 @@ jobs:
           ${{ env.KOSLI_CLI_VERSION }}
 
     - name: Create a Snapshot
+      env:
+        KOSLI_IMAGE: ${{ needs.setup.outputs.image_name }}
+        KOSLI_ENVIRONMENT_NAME: docker
       run: |
-        docker pull ${{ needs.setup.outputs.image_name }}
-        KOSLI_ENVIRONMENT=docker
-        kosli snapshot docker "${KOSLI_ENVIRONMENT}"
+        docker pull "${IMAGE_NAME}"
+        kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker
+        kosli snapshot docker "${KOSLI_ENVIRONMENT_NAME}"
+        #
         # Error message (from kosli CLI) says...
         # ignoring container 'alpha_server' as it uses an image with no repo digest
         # Yet...
         #  $ docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/kosli-dev/playground-alpha:$(git rev-parse --short=7 HEAD)
         # Says...
         #  ghcr.io/kosli-dev/playground-alpha@sha256:1cda5fd7ae473429d91ab7334c92ed4bdd9e5b6551d2f8377b339c438206caa0
+        #
         # Why does the Kosli CLI think there is no repo digest?
         # Is it because of multi-architecture?
         # On a real CI run, the host OS is presumably amd64, on my macbook it is presumably arm64 ?
@@ -149,3 +154,13 @@ jobs:
         # Says...
         # [ghcr.io/kosli-dev/playground-alpha@sha256:839701533965dfdc4b50990fecccbe52c2df23d91dc1e7b47072052e0653fdb2]
         # Showing there is only one artifact
+        #
+        # If I build an image with
+        #  $ cd alpha
+        #  $ make image
+        # and then inspect that image
+        #  $ docker inspect --format='{{index .RepoDigests}}' playground-alpha:latest
+        # I get
+        #   []
+        # Which is as expected.
+        
