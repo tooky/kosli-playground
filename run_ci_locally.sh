@@ -103,6 +103,7 @@ export $(cat "${ROOT_DIR}/.env")
 export $(cat "${ROOT_DIR}/.act.variables")
 IMAGE_TAG="$(git rev-parse --short=7 HEAD)"
 {
+  echo "# this file was auto-created by the ./run_ci_locally.sh script"
   echo ALPHA_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-alpha:${IMAGE_TAG}"
   echo ALPHA_CONTAINER_NAME=alpha_server
   echo ALPHA_PORT=4500

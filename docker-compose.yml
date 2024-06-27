@@ -58,6 +58,7 @@ services:
       watch:
         - action: rebuild
           path: ./beta
+
   webapp:
     build: webapp
     env_file: [ .env ]
