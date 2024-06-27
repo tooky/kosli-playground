@@ -60,8 +60,8 @@ jobs:
       with:
         fetch-depth: 1
 
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
+#    - name: Set up QEMU
+#      uses: docker/setup-qemu-action@v3
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -78,7 +78,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: ${{ env.SERVICE_NAME }}
-        platforms: linux/arm64
+#        platforms: linux/arm64
         push: true
         tags: ${{ needs.setup.outputs.image_name }},${{ needs.setup.outputs.tagged_image_previous }}
         cache-from: type=registry,ref=${{ needs.setup.outputs.tagged_image_previous }}
@@ -143,10 +143,8 @@ jobs:
         #  ghcr.io/kosli-dev/playground-alpha@sha256:1cda5fd7ae473429d91ab7334c92ed4bdd9e5b6551d2f8377b339c438206caa0
         # Why does the Kosli CLI think there is no repo digest?
         # Is it because of multi-architecture?
-        # On a real CI run, the host OS is presumably amd64, on my macbook it is presumably arm64 ? 
+        # On a real CI run, the host OS is presumably amd64, on my macbook it is presumably arm64 ?
+        # After a change to code/ or config/ dirs and a commit
         #  $ docker inspect --format='{{index .RepoDigests}}' ghcr.io/kosli-dev/playground-alpha:$(git rev-parse --short=7 HEAD)
         # Says...
-        # [ghcr.io/kosli-dev/playground-alpha@sha256:839701533965dfdc4b50990fecccbe52c2df23d91dc1e7b47072052e0653fdb2 
-        #  ghcr.io/kosli-dev/playground-alpha@sha256:c0bf7dfd12e5545dec6bcad09611b77d3b2d7a53dd2e780a2942a032b38976c7 
-        #  ghcr.io/kosli-dev/playground-alpha@sha256:cce82fabee1c092de1b7003de1fbabed0502e2dcfe86973d5a4572ff86394132]
-        # Why are there three?
+        # [ghcr.io/kosli-dev/playground-alpha@sha256:839701533965dfdc4b50990fecccbe52c2df23d91dc1e7b47072052e0653fdb2] 
