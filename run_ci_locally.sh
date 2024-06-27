@@ -97,6 +97,7 @@ if [ "${STATUS}" != "0" ]; then
 fi
 
 # Recreate .env file with correct image-tag so it matches those used in the CI pipeline's docker/build-push-action
+# This is needed to ensure that a local "docker compose up" uses images that have a repo digest.
 export ROOT_DIR="$(git rev-parse --show-toplevel)"
 # Note: don't put quotes around the $() expressions in these two export as it breaks on bash on a MacBook
 export $(cat "${ROOT_DIR}/.env")
