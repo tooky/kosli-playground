@@ -1,12 +1,6 @@
-# This would be set to https://app.kosli.com, for now I am testing/spiking on localhost
 KOSLI_HOST=http://localhost
-# Set this to your Kosli org name
 KOSLI_ORG=test-organization
-# Set the Kosli cli version here
 KOSLI_CLI_VERSION=2.10.8
-# act does not yet support ${{ github.event.repository.name }}
 REPO_NAME=playground
-# Set this to your docker org name
 DOCKER_ORG_NAME=kosli-dev
-# Set this to your docker registry
 DOCKER_REGISTRY=ghcr.io

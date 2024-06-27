@@ -96,6 +96,26 @@ if [ "${STATUS}" != "0" ]; then
   exit 42
 fi
 
+# Ensure docker-compose.yml has image names which match those used in the CI pipeline's docker/build-push-action
+export ROOT_DIR="$(git rev-parse --show-toplevel)"
+#export "$(cat "${ROOT_DIR}/.env")"
+#export "$(cat "${ROOT_DIR}/.act.variables")"
+
+IMAGE_TAG="$(git rev-parse --short=7 HEAD)"
+
+#ALPHA_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-${SERVICE_NAME}:${IMAGE_TAG}"
+#BETA_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-${SERVICE_NAME}:${IMAGE_TAG}"
+
+echo ALPHA_IMAGE="ghcr.io/kosli-dev/playground-alpha:${IMAGE_TAG}" > "${ROOT_DIR}/.env"
+echo ALPHA_CONTAINER_NAME=alpha_server >> "${ROOT_DIR}/.env"
+echo ALPHA_PORT=4500 >> "${ROOT_DIR}/.env"
+echo ALPHA_USER=nobody >> "${ROOT_DIR}/.env"
+echo BETA_IMAGE="ghcr.io/kosli-dev/playground-beta:${IMAGE_TAG}" >> "${ROOT_DIR}/.env"
+echo BETA_CONTAINER_NAME=beta_server >> "${ROOT_DIR}/.env"
+echo BETA_PORT=4501 >> "${ROOT_DIR}/.env"
+echo BETA_USER=nobody >> "${ROOT_DIR}/.env"
+echo WEBAPP_PORT=4502 >> "${ROOT_DIR}/.env"
+
 act \
   --secret=GITHUB_TOKEN="${GITHUB_TOKEN}" \
   --secret-file=.act.secrets \
