@@ -106,15 +106,17 @@ IMAGE_TAG="$(git rev-parse --short=7 HEAD)"
 #ALPHA_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-${SERVICE_NAME}:${IMAGE_TAG}"
 #BETA_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-${SERVICE_NAME}:${IMAGE_TAG}"
 
-echo ALPHA_IMAGE="ghcr.io/kosli-dev/playground-alpha:${IMAGE_TAG}" > "${ROOT_DIR}/.env"
-echo ALPHA_CONTAINER_NAME=alpha_server >> "${ROOT_DIR}/.env"
-echo ALPHA_PORT=4500 >> "${ROOT_DIR}/.env"
-echo ALPHA_USER=nobody >> "${ROOT_DIR}/.env"
-echo BETA_IMAGE="ghcr.io/kosli-dev/playground-beta:${IMAGE_TAG}" >> "${ROOT_DIR}/.env"
-echo BETA_CONTAINER_NAME=beta_server >> "${ROOT_DIR}/.env"
-echo BETA_PORT=4501 >> "${ROOT_DIR}/.env"
-echo BETA_USER=nobody >> "${ROOT_DIR}/.env"
-echo WEBAPP_PORT=4502 >> "${ROOT_DIR}/.env"
+{
+  echo ALPHA_IMAGE="ghcr.io/kosli-dev/playground-alpha:${IMAGE_TAG}"
+  echo ALPHA_CONTAINER_NAME=alpha_server
+  echo ALPHA_PORT=4500
+  echo ALPHA_USER=nobody
+  echo BETA_IMAGE="ghcr.io/kosli-dev/playground-beta:${IMAGE_TAG}"
+  echo BETA_CONTAINER_NAME=beta_server
+  echo BETA_PORT=4501
+  echo BETA_USER=nobody
+  echo WEBAPP_PORT=4502
+} > "${ROOT_DIR}/.env"
 
 act \
   --secret=GITHUB_TOKEN="${GITHUB_TOKEN}" \

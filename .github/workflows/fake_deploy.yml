@@ -129,7 +129,7 @@ jobs:
     - name: Create a Snapshot
       env:
         IMAGE_NAME: ${{ needs.setup.outputs.image_name }}
-        KOSLI_ENVIRONMENT_NAME: docker
+        KOSLI_ENVIRONMENT_NAME: playground-prod
       run: |
         docker pull "${IMAGE_NAME}"
         kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker

@@ -1,6 +1,8 @@
-KOSLI_HOST=http://localhost
-KOSLI_ORG=test-organization
-KOSLI_CLI_VERSION=2.10.8
 REPO_NAME=playground
+
 DOCKER_ORG_NAME=kosli-dev
 DOCKER_REGISTRY=ghcr.io
+
+KOSLI_HOST=http://localhost
+KOSLI_ORG=playground-org
+KOSLI_CLI_VERSION=2.10.8
