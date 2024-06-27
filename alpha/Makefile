@@ -1,4 +1,6 @@
 
+export COMMIT_SHORT_SHA = $(shell git rev-parse --short=7 HEAD)
+
 image:
 	docker compose build alpha
 

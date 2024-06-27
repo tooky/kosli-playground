@@ -96,27 +96,7 @@ if [ "${STATUS}" != "0" ]; then
   exit 42
 fi
 
-# Recreate .env file with correct image-tag so it matches those used in the CI pipeline's docker/build-push-action
-# This is needed to ensure that a local "docker compose up" uses images that have a repo digest.
-export ROOT_DIR="$(git rev-parse --show-toplevel)"
-# Note: don't put quotes around the $() expressions in these two export as it breaks on bash on a MacBook
-export $(cat "${ROOT_DIR}/.env")
-export $(cat "${ROOT_DIR}/.act.variables")
-IMAGE_TAG="$(git rev-parse --short=7 HEAD)"
-{
-  echo "# this file was auto-created by the ./run_ci_locally.sh script"
-  echo ALPHA_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-alpha:${IMAGE_TAG}"
-  echo ALPHA_CONTAINER_NAME=alpha_server
-  echo ALPHA_PORT=4500
-  echo ALPHA_USER=nobody
-  echo BETA_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-beta:${IMAGE_TAG}"
-  echo BETA_CONTAINER_NAME=beta_server
-  echo BETA_PORT=4501
-  echo BETA_USER=nobody
-  echo WEBAPP_PORT=4502
-} > "${ROOT_DIR}/.env"
-
 act \
   --secret=GITHUB_TOKEN="${GITHUB_TOKEN}" \
   --secret-file=.act.secrets \
-  --var-file=.act.variables
+  --var-file=.env

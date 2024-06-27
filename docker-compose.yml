@@ -1,3 +1,4 @@
+
 services:
   nginx:
     image: nginx:stable-alpine
@@ -18,7 +19,7 @@ services:
   alpha:
     build:
       context: ./alpha
-    image: ${ALPHA_IMAGE}
+    image: ${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-alpha:${COMMIT_SHORT_SHA}
     container_name: ${ALPHA_CONTAINER_NAME}
     user: ${ALPHA_USER}
     env_file: [ .env ]
@@ -40,7 +41,7 @@ services:
   beta:
     build:
       context: ./beta
-    image: ${BETA_IMAGE}
+    image: ${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-alpha:${COMMIT_SHORT_SHA}
     container_name: ${BETA_CONTAINER_NAME}
     user: ${BETA_USER}
     env_file: [ .env ]

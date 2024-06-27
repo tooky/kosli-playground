@@ -113,7 +113,8 @@ jobs:
 
     - name: Fake a deployment
       run: |
-        docker compose up --wait
+        export COMMIT_SHORT_SHA=$(git rev-parse --short=7 HEAD)
+        docker compose up ${{ env.SERVICE_NAME }} --wait
 
     - name: Setup Kosli cli
       uses: kosli-dev/setup-cli-action@v2
