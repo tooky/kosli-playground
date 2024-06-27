@@ -8,7 +8,6 @@ on:
       - alpha/**
       - .github/workflows/alpha_main.yml
 
-
 env:
   DOCKER_REGISTRY: ${{ vars.DOCKER_REGISTRY }}
   DOCKER_ORG_NAME: ${{ vars.DOCKER_ORG_NAME }}
@@ -44,7 +43,6 @@ jobs:
           echo "image_name=${image_name}" >> ${GITHUB_OUTPUT}          
           echo "tagged_image_previous=${tagged_image_previous}" >> ${GITHUB_OUTPUT}
           echo "image_tar_filename=${image_tar_filename}" >> ${GITHUB_OUTPUT}
-
 
   build:
     name: Build docker image and push it to registry
@@ -91,7 +89,6 @@ jobs:
         path: ${{ needs.setup.outputs.image_tar_filename }}
         key: ${{ needs.setup.outputs.image_name }}
 
-
   lint:
     name: Run rubocop linter
     needs: [build]
@@ -106,7 +103,6 @@ jobs:
         cd "${{ env.SERVICE_NAME }}"
         make lint
 
-
   deploy:
     runs-on: ubuntu-latest
     needs: [setup, build]
@@ -117,7 +113,6 @@ jobs:
 
     - name: Fake a deployment
       run: |
-        docker pull ${{ needs.setup.outputs.image_name }}
         docker compose up --wait
 
     - name: Setup Kosli cli
@@ -131,32 +126,4 @@ jobs:
         IMAGE_NAME: ${{ needs.setup.outputs.image_name }}
         KOSLI_ENVIRONMENT_NAME: playground-prod
       run: |
-        docker pull "${IMAGE_NAME}"
-        kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker
         kosli snapshot docker "${KOSLI_ENVIRONMENT_NAME}"
-        #
-        # Error message (from kosli CLI) says...
-        # ignoring container 'alpha_server' as it uses an image with no repo digest
-        # Yet...
-        #  $ docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/kosli-dev/playground-alpha:$(git rev-parse --short=7 HEAD)
-        # Says...
-        #  ghcr.io/kosli-dev/playground-alpha@sha256:1cda5fd7ae473429d91ab7334c92ed4bdd9e5b6551d2f8377b339c438206caa0
-        #
-        # Why does the Kosli CLI think there is no repo digest?
-        # Is it because of multi-architecture?
-        # On a real CI run, the host OS is presumably amd64, on my macbook it is presumably arm64 ?
-        # After a change to code/ or config/ dirs and a commit
-        #  $ docker inspect --format='{{index .RepoDigests}}' ghcr.io/kosli-dev/playground-alpha:$(git rev-parse --short=7 HEAD)
-        # Says...
-        # [ghcr.io/kosli-dev/playground-alpha@sha256:839701533965dfdc4b50990fecccbe52c2df23d91dc1e7b47072052e0653fdb2]
-        # Showing there is only one artifact
-        #
-        # If I build an image with
-        #  $ cd alpha
-        #  $ make image
-        # and then inspect that image
-        #  $ docker inspect --format='{{index .RepoDigests}}' playground-alpha:latest
-        # I get
-        #   []
-        # Which is as expected.
-        
