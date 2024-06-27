@@ -1,2 +1,2 @@
 Info to go here...
-You can edit this file to force the creation of a new image. Edit count: 3
+You can edit this file to force the creation of a new image. Edit count: 4
