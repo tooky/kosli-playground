@@ -147,4 +147,5 @@ jobs:
         # After a change to code/ or config/ dirs and a commit
         #  $ docker inspect --format='{{index .RepoDigests}}' ghcr.io/kosli-dev/playground-alpha:$(git rev-parse --short=7 HEAD)
         # Says...
-        # [ghcr.io/kosli-dev/playground-alpha@sha256:839701533965dfdc4b50990fecccbe52c2df23d91dc1e7b47072052e0653fdb2] 
+        # [ghcr.io/kosli-dev/playground-alpha@sha256:839701533965dfdc4b50990fecccbe52c2df23d91dc1e7b47072052e0653fdb2]
+        # Showing there is only one artifact
