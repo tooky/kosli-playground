@@ -96,22 +96,18 @@ if [ "${STATUS}" != "0" ]; then
   exit 42
 fi
 
-# Ensure docker-compose.yml has image names which match those used in the CI pipeline's docker/build-push-action
+# Recreate .env file with correct image-tag so it matches those used in the CI pipeline's docker/build-push-action
 export ROOT_DIR="$(git rev-parse --show-toplevel)"
-#export "$(cat "${ROOT_DIR}/.env")"
-#export "$(cat "${ROOT_DIR}/.act.variables")"
-
+# Note: don't put quotes around the $() expressions in these two export as it breaks on bash on a MacBook
+export $(cat "${ROOT_DIR}/.env")
+export $(cat "${ROOT_DIR}/.act.variables")
 IMAGE_TAG="$(git rev-parse --short=7 HEAD)"
-
-#ALPHA_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-${SERVICE_NAME}:${IMAGE_TAG}"
-#BETA_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-${SERVICE_NAME}:${IMAGE_TAG}"
-
 {
-  echo ALPHA_IMAGE="ghcr.io/kosli-dev/playground-alpha:${IMAGE_TAG}"
+  echo ALPHA_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-alpha:${IMAGE_TAG}"
   echo ALPHA_CONTAINER_NAME=alpha_server
   echo ALPHA_PORT=4500
   echo ALPHA_USER=nobody
-  echo BETA_IMAGE="ghcr.io/kosli-dev/playground-beta:${IMAGE_TAG}"
+  echo BETA_IMAGE="${DOCKER_REGISTRY}/${DOCKER_ORG_NAME}/${REPO_NAME}-beta:${IMAGE_TAG}"
   echo BETA_CONTAINER_NAME=beta_server
   echo BETA_PORT=4501
   echo BETA_USER=nobody
