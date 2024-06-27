@@ -132,7 +132,7 @@ jobs:
 
     - name: Create a Snapshot
       env:
-        KOSLI_IMAGE: ${{ needs.setup.outputs.image_name }}
+        IMAGE_NAME: ${{ needs.setup.outputs.image_name }}
         KOSLI_ENVIRONMENT_NAME: docker
       run: |
         docker pull "${IMAGE_NAME}"
