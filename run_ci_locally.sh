@@ -73,6 +73,11 @@ stderr()
   >&2 echo "ERROR: ${message}"
 }
 
+repo_root()
+{
+  git rev-parse --show-toplevel
+}
+
 exit_non_zero_unless_installed docker https://docs.docker.com/engine/install/
 exit_non_zero_unless_installed act    https://nektosact.com/installation/index.html
 exit_non_zero_unless_installed gh     https://github.com/cli/cli#installation
@@ -96,7 +101,22 @@ set -e
 #  exit 42
 #fi
 
+SECRETS_FILENAME="$(repo_root)/.act.secrets"
+
+if [ ! -f "${SECRETS_FILENAME}" ]; then
+  # act does not check the existence of the file named in the --secret-file flag
+  stderr "You need a file called .act.secrets at the root of your git repo"
+  stderr "It needs to contain the KOSLI_API_TOKEN, in .env format"
+  stderr "For example:"
+  stderr "KOSLI_API_TOKEN=zGMiwXC28AHll6bqcv4VrCRwINQFl54IJKPQv5Vekqg"
+  stderr ""
+  stderr "Create your api-token in your Kosli profile page"
+  stderr "Select 'Profile' from the drop-down menu under your user-icon at the top-right"
+  stderr "Note: The .act.secrets file is .gitignore'd"
+  exit 42
+fi
+
 act \
   --secret=GITHUB_TOKEN="${GITHUB_TOKEN}" \
-  --secret-file=.act.secrets \
+  --secret-file="${SECRETS_FILENAME}" \
   --var-file=.env
