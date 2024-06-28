@@ -89,12 +89,12 @@ curl -sS -f -I -H "Authorization: token ${GITHUB_TOKEN}" https://api.github.com 
 STATUS=$?
 set -e
 
-if [ "${STATUS}" != "0" ]; then
-  stderr "Your GITHUB_TOKEN does not have 'write:packages' scope."
-  stderr "You can reset a token's scopes with the command:"
-  stderr "$ gh auth login --scopes=write:packages"
-  exit 42
-fi
+#if [ "${STATUS}" != "0" ]; then
+#  stderr "Your GITHUB_TOKEN does not have 'write:packages' scope."
+#  stderr "You can reset a token's scopes with the command:"
+#  stderr "$ gh auth login --scopes=write:packages"
+#  exit 42
+#fi
 
 act \
   --secret=GITHUB_TOKEN="${GITHUB_TOKEN}" \
