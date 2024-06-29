@@ -116,6 +116,12 @@ if [ ! -f "${SECRETS_FILENAME}" ]; then
   exit 42
 fi
 
+if [ -n "$(git status -s)" ]; then
+  stderr "You have uncommitted local changes"
+  stderr "Commit the changes and then run ./run_ci_locally.sh"
+  exit 42
+fi
+
 act \
   --secret=GITHUB_TOKEN="${GITHUB_TOKEN}" \
   --secret-file="${SECRETS_FILENAME}" \
