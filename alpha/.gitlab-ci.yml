@@ -1,14 +1,32 @@
+variables:
+  SERVICE_NAME: alpha
+  IMAGE_NAME: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${SERVICE_NAME}:${CI_COMMIT_SHORT_SHA}
+
 default:
   image: docker:26.1.4
   services:
     - docker:26.1.4-dind
   before_script:
-    - apk add make
-    - cd alpha/
+    - apk add make bash
+    - cd ${SERVICE_NAME}
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+
+stages:
+  - build
+  - test
 
 build:
   stage: build
   script:
-    - docker build -t ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}-alpha:${CI_COMMIT_SHORT_SHA} .
-    - docker push ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}-alpha:${CI_COMMIT_SHORT_SHA}
+    - docker build -t ${IMAGE_NAME} .
+    - docker push ${IMAGE_NAME}
+
+test:
+  stage: test
+  script:
+    - make test
+
+lint:
+  stage: test
+  script:
+    - make lint
