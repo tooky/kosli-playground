@@ -9,15 +9,15 @@ on:
       - .github/workflows/alpha_main.yml
 
 env:
-  DOCKER_REGISTRY: ${{ vars.DOCKER_REGISTRY }}
-  DOCKER_ORG_NAME: ${{ vars.DOCKER_ORG_NAME }}
   DOCKER_USERNAME: ${{ github.actor }}
   DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-  REPO_NAME: ${{ vars.REPO_NAME }}
+  DOCKER_REGISTRY: ghcr.io
+  DOCKER_ORG_NAME: ${{ github.actor }}
+  REPO_NAME: ${{ github.event.repository.name }}
   SERVICE_NAME: alpha
-  KOSLI_CLI_VERSION: ${{ vars.KOSLI_CLI_VERSION }}
-  KOSLI_HOST: ${{ vars.KOSLI_HOST }}
-  KOSLI_ORG: ${{ vars.KOSLI_ORG }}
+  KOSLI_CLI_VERSION: 2.10.9
+  KOSLI_HOST: https://app.kosli.com
+  KOSLI_ORG: ${{ github.actor }}
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
 
 jobs:
