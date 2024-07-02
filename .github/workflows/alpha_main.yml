@@ -3,7 +3,7 @@ name: alpha on main
 on:
   push:
     branches:
-      - main
+      - act
     paths:
       - alpha/**
       - .github/workflows/alpha_main.yml
