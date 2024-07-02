@@ -12,7 +12,7 @@ env:
   DOCKER_USERNAME: ${{ github.actor }}
   DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
   DOCKER_REGISTRY: ghcr.io
-  DOCKER_ORG_NAME: ${{ github.actor }}
+  DOCKER_ORG_NAME: ${{ github.repository_owner }}
   REPO_NAME: ${{ github.event.repository.name }}
   SERVICE_NAME: alpha
   KOSLI_CLI_VERSION: 2.10.9
