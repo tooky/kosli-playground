@@ -1,4 +1,4 @@
-name: alpha on act
+name: alpha on act branch
 
 on:
   push:
