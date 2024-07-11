@@ -1,6 +1,5 @@
 .idea/
 .tool-versions
-.act.secrets
 bin/
 alpha/test/reports/*
 alpha/test/reports/.*
