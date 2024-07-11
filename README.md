@@ -68,6 +68,21 @@ It should show the string `Alpha` and nothing else.
 - Copy this api-key (Kosli stores a hashed version of this, so it will never be available from https://app.kosli.com again)
 - Create a Github Action secret, called `KOSLI_API_TOKEN`, set to the copied value
 
+## Check the env:DOCKER_ORG_NAME setting
+
+- The `.github/workflows/alpha_main.yml` file has this near the top:
+```yml
+env:
+  DOCKER_ORG_NAME: ${{ github.repository_owner }}
+```
+Docker Org names cannot contain uppercase characters.
+There is currently no built-in Github Action function to convert uppercase to lowercase.
+If `repository_owner` (your GitHub username) contains uppercase characters, edit this line to its lowercased value.
+For example, if `repository_owner==JohnSmith`, then
+```yml
+env:
+  DOCKER_ORG_NAME: johnsmith  # ${{ github.repository_owner }} converted to lowercase.
+```
 
 # Make a change, commit, and push
 
