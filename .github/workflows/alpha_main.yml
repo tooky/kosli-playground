@@ -12,7 +12,7 @@ env:
   DOCKER_USERNAME: ${{ github.actor }}
   DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
   DOCKER_REGISTRY: ghcr.io
-  DOCKER_ORG_NAME: ${{ github.repository_owner }}
+  #DOCKER_ORG_NAME: ${{ github.repository_owner }}
   REPO_NAME: ${{ github.event.repository.name }}
   SERVICE_NAME: alpha
   KOSLI_CLI_VERSION: 2.10.10
@@ -34,8 +34,12 @@ jobs:
       - name: Set outputs
         id: variables
         run: |
+          # Docker Org Name cannot have uppercase characters
+          DOCKER_ORG_NAME=$(echo ${{github.repository_owner}} | tr '[:upper:]' '[:lower:]')
+          echo "DOCKER_ORG_NAME=${DOCKER_ORG_NAME}" >>${GITHUB_ENV}
+          #
           image_tag="${GITHUB_SHA:0:7}"
-          image_uri="${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_ORG_NAME }}/${{ env.REPO_NAME }}-${{ env.SERVICE_NAME }}"
+          image_uri="${{ env.DOCKER_REGISTRY }}/${DOCKER_ORG_NAME}/${{ env.REPO_NAME }}-${{ env.SERVICE_NAME }}"
           image_name="${image_uri}:${image_tag}"
           tagged_image_previous="${image_uri}:previous"
           image_tar_filename="/tmp/${{ env.REPO_NAME }}-${{ env.SERVICE_NAME }}:previous.tar"            
@@ -57,6 +61,9 @@ jobs:
     - uses: actions/checkout@v4.1.1
       with:
         fetch-depth: 1
+
+    - name: Check docker org name is available
+      run: echo "DOCKER_ORG_NAME=:${{ env.DOCKER_ORG_NAME }}:"
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
