@@ -3,7 +3,7 @@ name: alpha on act branch
 on:
   push:
     branches:
-      - fake_deploy
+      - main
     paths:
       - alpha/**
       - .github/workflows/alpha_main.yml
