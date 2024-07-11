@@ -22,7 +22,8 @@ Each workflow fakes the deployment step by doing a "docker compose up"
 
 This will create a Personal Kosli Organization whose name is your GitHub username.
 
-## At https://app.kosli.com create a Docker Environment.
+## At https://app.kosli.com create a Docker Environment
+
 This is the Kosli Environment that will record what is running in the "docker compose up" fake deployment.
 - Select `Environments` from left hand side menu
 - Click the blue `[Add new environment]` button at the top
@@ -34,11 +35,13 @@ This is the Kosli Environment that will record what is running in the "docker co
 - Click the blue `[Save environment]` button
 
 ## Set the variables in the `.env` file at the root of the repo
+
 - DOCKER_ORG_NAME to your GitHub username
 - REPO_NAME if you changed from `playground`
 - KOSLI_ORG to the name of your Kosli personal Org
 
 ## Check you can build an image locally
+
 ```bash
 cd alpha
 make image
@@ -53,16 +56,17 @@ Check you can reach `localhost:4500` in your browser.
 It should show the string `Alpha` and nothing else.
 
 ## Create a KOSLI_API_TOKEN and save it as a Github Action secret
+
 (Note: In a Shared Organization you would do this under a Service account) 
 - At https://app.kosli.com click your github user icon at the top-right
 - In the dropdown select `Profile`
 - Click the blue `[+ Add API Key]` button
-- Choose a value for the "API key expires in" or leave it as Never
-- Fill in the Description field
+- Choose a value for the `API key expires in` or leave it as Never
+- Fill in the `Description` field
 - Click the blue `[Add]` button
 - You will see the api-key, something like `p1Qv8TggcjOG_UX-WImP3Y6LAf2VXPNN_p9-JtFuHr0`
 - Copy this api-key (Kosli stores a hashed version of this, so it will never be available from https://app.kosli.com again)
-- Set a Github Action secret, called KOSLI_API_TOKEN, set to the copied value
+- Set a Github Action secret, called `KOSLI_API_TOKEN`, set to the copied value
 
 
 # Make a change, commit, and push
@@ -90,8 +94,8 @@ It should show the string `Alpha` and nothing else.
   Note that this command does _not_ need to set the `--org`, or `--api-token` flags because
   the KOSLI_ORG and KOSLI_API_TOKEN environment variables have been set at the top of the workflow yml file.
 
-- At https://app.kosli.com, verify your `playground-prod` Environment now has a single snapshot (hit refresh in your browser)  
-  showing the `playground-alpha` service running.
+- At https://app.kosli.com, verify your `playground-prod` Environment now has a single snapshot
+(hit refresh in your browser) showing the `playground-alpha` service running.
 
 
 
