@@ -35,7 +35,9 @@ jobs:
         id: variables
         run: |
           # Docker Org Name cannot have uppercase characters
-          DOCKER_ORG_NAME=$(echo ${{github.repository_owner}} | tr '[:upper:]' '[:lower:]')
+          echo ":${{github.repository_owner}}:"
+          export DOCKER_ORG_NAME=$(echo ${{github.repository_owner}} | tr '[:upper:]' '[:lower:]')
+          echo "DOCKER_ORG_NAME=:${DOCKER_ORG_NAME}:"
           echo "DOCKER_ORG_NAME=${DOCKER_ORG_NAME}" >>${GITHUB_ENV}
           #
           image_tag="${GITHUB_SHA:0:7}"
