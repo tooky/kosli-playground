@@ -66,7 +66,7 @@ It should show the string `Alpha` and nothing else.
 - Click the blue `[Add]` button
 - You will see the api-key, something like `p1Qv8TggcjOG_UX-WImP3Y6LAf2VXPNN_p9-JtFuHr0`
 - Copy this api-key (Kosli stores a hashed version of this, so it will never be available from https://app.kosli.com again)
-- Set a Github Action secret, called `KOSLI_API_TOKEN`, set to the copied value
+- Create a Github Action secret, called `KOSLI_API_TOKEN`, set to the copied value
 
 
 # Make a change, commit, and push
@@ -75,13 +75,13 @@ It should show the string `Alpha` and nothing else.
   for the three services. The `.github/workflows` files have `on: paths:` filters set, so they only run when
   there is a change in their respective directory (or the workflow file itself)
 
-- Edit the file `alpha/code/alpha.rb` so the return string from the '/' route is something other than `Alpha`
+- Edit the file `alpha/code/alpha.rb` so the return string from the `'/'` route is something other than `Alpha`
 
 - git add
 - git commit
 - git push
 
-- The CI pipeline should run successfully. The fake `deploy` job runs this command:
+- The CI pipeline should run successfully. The fake `deploy:` job runs this command:
   ```yml
   docker compose up ${{ env.SERVICE_NAME }} --wait
   ```
@@ -89,13 +89,14 @@ It should show the string `Alpha` and nothing else.
   ```yml
   kosli snapshot docker "${KOSLI_ENVIRONMENT_NAME}"
   ```
-  This will take a snapshot of the docker containers currently running (inside the CI pipeline)
-  and send their image names and digests/fingerprints to Kosli.
+  This takes a snapshot of the docker containers currently running (inside the CI pipeline)
+  and sends their image names and digests/fingerprints to the named Environment in Kosli.
   Note that this command does _not_ need to set the `--org`, or `--api-token` flags because
-  the KOSLI_ORG and KOSLI_API_TOKEN environment variables have been set at the top of the workflow yml file.
+  the `KOSLI_ORG` and `KOSLI_API_TOKEN` environment variables have been set at the top of the workflow yml file.
 
 - At https://app.kosli.com, verify your `playground-prod` Environment now has a single snapshot
 (hit refresh in your browser) showing the `playground-alpha` service running.
+The image tag should be the short-sha of your new HEAD commit. 
 
 
 
