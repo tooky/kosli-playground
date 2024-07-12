@@ -28,7 +28,7 @@ services:
     restart: "no"
     volumes:
       - ./alpha/test:/app/test/:ro
-      - ./alpha/test/reports:/app/test/reports
+      - ./alpha/test/reports:/app/test/reports:rw
       - type: tmpfs
         target: /tmp
         tmpfs:
@@ -51,6 +51,7 @@ services:
     restart: "no"
     volumes:
       - ./beta/test:/app/test/:ro
+      - ./beta/test/reports:/app/test/reports:rw
       - type: tmpfs
         target: /tmp
         tmpfs:
