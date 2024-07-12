@@ -204,7 +204,7 @@ variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
 - git commit
 - git push
 
-- Open https://app.kolsi.com to your `playground-alpha` Environment
+- Open https://app.kosli.com to your `playground-alpha` Environment
 - You will see a new Snapshot
 - The Artifact will have Provenance
 
@@ -216,7 +216,7 @@ variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
 - git commit
 - git push
 - The CI pipeline should run successfully
-- Open https://app.kolsi.com to your `playground-alpha` Environment
+- Open https://app.kosli.com to your `playground-alpha` Environment
 - You will see a new Snapshot
 - The Artifact will have Provenance
 - Click the `>` chevron to reveal more information in a drop-down
