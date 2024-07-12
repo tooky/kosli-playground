@@ -34,6 +34,7 @@ This is the Kosli Environment that will record what is running in the "docker co
 - Leave `Exclude scaling events` checked
 - Switch `Compliance Calculation Require artifacts to have provenance` to `On`
 - Click the blue `[Save environment]` button
+- Open a tab in your browser for the `playground-prod` Kosli Environment as we will often review how it changes 
 
 ## Set the variables in the `.env` file at the root of the repo
 
@@ -66,7 +67,7 @@ It should show the string `Alpha` and nothing else.
 - Click the blue `[Add]` button
 - You will see the api-key, something like `p1Qv8TggcjOG_UX-WImP3Y6LAf2VXPNN_p9-JtFuHr0`
 - Copy this api-key (Kosli stores a hashed version of this, so it will never be available from https://app.kosli.com again)
-- Create a [GitHub Action secret](settings/secrets/actions), called `KOSLI_API_TOKEN`, set to the copied value
+- Create a GitHub Action secret (at the repo level), called `KOSLI_API_TOKEN`, set to the copied value
 
 ## Check the env:DOCKER_ORG_NAME setting
 
@@ -90,10 +91,8 @@ env:
   for the three services. The `.github/workflows` files have `on: paths:` filters set, so they only run when
   there is a change in their respective directory (or the workflow file itself)
 - Edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is something other than `Alpha`
-- git add
-- git commit
-- git push
-- The fake `deploy:` job runs this command:
+- git commit (and push if not editing in GitHub) 
+- The fake [deploy](.github/workflows/alpha_main.yml#L128) job runs this command:
   ```yml
   docker compose up ${{ env.SERVICE_NAME }} --wait
   ```
@@ -105,23 +104,21 @@ env:
   and sends their image names and digests/fingerprints to the named Kosli Environment.
   Note that this command does _not_ need to set the `--org`, or `--api-token` flags because
   the `KOSLI_ORG` and `KOSLI_API_TOKEN` environment variables have been set at the top of the workflow yml file.
-- Wait for the GitHub Action Workflow to complete
-- At https://app.kosli.com, verify your `playground-prod` Environment now has a single snapshot
-(hit refresh in your browser) showing the `playground-alpha` image running.
-The image tag should be the short-sha of your new HEAD commit. 
-The playground-alpha Artifact is showing as Non-Compliant. 
+- Wait for the GitHub Action Workflow to complete.
+- Refresh the `playground-prod` Environment at https://app.kosli.com and verify there is now a single snapshot
+showing the `playground-alpha` image running. The image tag should be the short-sha of your new HEAD commit 
+The playground-alpha Artifact is showing as Non-Compliant.
 This is because the Environment was set up to `Require artifacts to have provenance`
 and this Artifact currently has no [provenance](https://www.kosli.com/blog/how-to-secure-your-software-supply-chain-with-artifact-binary-provenance/
-). We will add provenance shortly.
+). We will provide provenance shortly.
+
 
 ## Make another change, commit, and push
 
-- Re-edit the file `alpha/code/alpha.rb` so the return string from the `'/'` route is a new string
-- git add
-- git commit
-- git push
+- Re-edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is a new string
+- git commit (and push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
-- At https://app.kosli.com, verify your `playground-prod` Environment now has two snapshots.
+- Refresh the `playground-prod` Environment at https://app.kosli.com and verify it now has two snapshots.
 - Again, the image tag should be the short-sha of your new HEAD commit
 
 
@@ -133,15 +130,15 @@ and this Artifact currently has no [provenance](https://www.kosli.com/blog/how-t
     Each trail must have a unique identifier of your choice, based on your process and domain. 
     Example identifiers include git commits or pull request numbers.
   
-- At the top of the `.github/workflows/alpha_main.yml` file add two new `env:` variables for the
+- At the top of the [.github/workflows/alpha_main.yml](.github/workflows/alpha_main.yml) file add two new `env:` variables for the
 Kosli Flow (named after your repo) and Kosli Trail (named after each git-commit), as follows:
 ```yml
 env:
   KOSLI_FLOW: playground-alpha-ci
   KOSLI_TRAIL: ${{ github.sha }}
 ```
-- Still in `.github/workflows/alpha_main.yml`, add the following entries to the end of the `setup:` job
-to install the Kosli CLI and create the Flow and Trail.
+- Still in [.github/workflows/alpha_main.yml](.github/workflows/alpha_main.yml), add the following entries to the end of the `setup:` job
+to install the Kosli CLI and create the Kosli Flow and Kosli Trail.
 ```yml
       - uses: actions/checkout@v4.1.1
 
@@ -161,9 +158,7 @@ to install the Kosli CLI and create the Flow and Trail.
           kosli begin trail "${{ env.KOSLI_TRAIL }}"
             --description="${{ github.actor }} - $(git log -1 --pretty=%B)"
 ```
-- git add
-- git commit
-- git push
+- git commit (and push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
 - In https://app.kosli.com, click `Flows` on the left hand side menu
 - Click the Flow named `playground-alpha-ci`
@@ -175,22 +170,23 @@ to install the Kosli CLI and create the Flow and Trail.
 ## Attest the provenance of the Artifact in the CI pipeline
 
 - Most attestations need the Docker image digest/fingerprint. So we will start by making this available to all jobs.
-- In `.github/workflows/alpha_main.yml`, uncomment the following comments near the top of the `build-image:` job
-```yml
-#    outputs:
-#      artifact_digest: ${{ steps.variables.outputs.artifact_digest }}
-```
-- In `.github/workflows/alpha_main.yml`, uncomment the following comments near the bottom of the `build-image:` job
-```yml
-#    - name: Make image digest available to following jobs
-#      id: variables
-#      run: |
-#        DIGEST=$(echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')
-#        echo "artifact_digest=${DIGEST}" >> ${GITHUB_OUTPUT}
-```
-- In `.github/workflows/alpha_main.yml`, add the following to the end of the `build-image:` job
-to install the Kosli CLI and attest the Artifact's digest/fingerprint.
-```yml
+- In [.github/workflows/alpha_main.yml](.github/workflows/alpha_main.yml)...
+  - uncomment the following comments near the top of the `build-image:` job
+  ```yml
+  #    outputs:
+  #      artifact_digest: ${{ steps.variables.outputs.artifact_digest }}
+  ```
+  - uncomment the following comments near the bottom of the `build-image:` job
+  ```yml
+  #    - name: Make image digest available to following jobs
+  #      id: variables
+  #      run: |
+  #        DIGEST=$(echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')
+  #        echo "artifact_digest=${DIGEST}" >> ${GITHUB_OUTPUT}
+  ```
+  - add the following to the end of the `build-image:` job
+  to install the Kosli CLI and attest the Artifact's digest/fingerprint.
+  ```yml
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
@@ -201,34 +197,30 @@ to install the Kosli CLI and attest the Artifact's digest/fingerprint.
           kosli attest artifact "${needs.setup.outputs.image_name}" 
             --artifact-type=docker
             --name=alpha
-```
+  ```
 - Note that the `kosli attest` command does not need to specify the `--org` or `--flow` or `--trail` flags because there are 
 environment variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
-- The command above asks the Kosli CLI to calculate the fingerprint. To do this the CLI needs to be told
-the name of the Docker image (`${needs.setup.outputs.image_name}`), and that this is a Docker image
-(`--artifact-type=docker`). This requires that the image has previously been pushed to its registry (which of course it has)
-- You can also provide the fingerprint directly using the `--fingerprint` flag or `KOSLI_FINGERPRINT` environment 
-  variable. We will seem examples of this later. 
-  ```
-- git add
-- git commit
-- git push
+  - The command above asks the Kosli CLI to calculate the fingerprint. To do this the CLI needs to be told
+  the name of the Docker image (`${needs.setup.outputs.image_name}`), and that this is a Docker image
+  (`--artifact-type=docker`). This requires that the image has previously been pushed to its registry (which of course it has)
+  - You can also provide the fingerprint directly using the `--fingerprint` flag or `KOSLI_FINGERPRINT` environment 
+    variable. We will seem examples of this later. 
+    ```
+- git commit (and push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
-- Open https://app.kosli.com to your `playground-alpha` Environment
+- Refresh the `playground-prod` Environment at https://app.kosli.com 
 - You will see a new Snapshot
 - The Artifact will have Provenance
 
 
 ## View a deployment diff
 
-- Re-edit the file `alpha/code/alpha.rb` so the return string from the `'/'` route is yet another new string
-- git add
-- git commit
-- git push
+- Re-edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is yet another new string
+- git commit (and push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
-- Open https://app.kosli.com to your `playground-alpha` Environment
+- Refresh the `playground-prod` Environment at https://app.kosli.com
 - You will see a new Snapshot
-- The Artifact will have Provenance
+- Its Artifact will have Provenance
 - Click the `>` chevron to reveal more information in a drop-down
 - Click the link titled `View diff` in the entry called `Previous` to
 see the deployment-diff; the commit-level diff between the currently running
@@ -237,7 +229,7 @@ alpha Artifact, and the alpha Artifact it replaced.
 
 ## Attest unit-test evidence to Kosli
 
-- `.github/workflows/alpha_main.yml` has a `unit-test:` job. You will attest its results to Kosli
+- [.github/workflows/alpha_main.yml](.github/workflows/alpha_main.yml) has a `unit-test:` job. You will attest its results to Kosli
 - Add the following to the end of the `unit-test:` job to install the Kosli CLI, and attest the unit-test results
 ```yml
     - name: Install the Kosli CLI
@@ -251,8 +243,6 @@ alpha Artifact, and the alpha Artifact it replaced.
       run:
         kosli attest junit --name=alpha.unit-test --results-dir=alpha/test/reports/junit
 ```
-- git add
-- git commit
-- git push
+- git commit (and push if not working in GitHub)
 - Wait for the GitHub Action Workflow to complete
 
