@@ -16,7 +16,7 @@ Each workflow fakes the deployment step by doing a "docker compose up"
 
 # Setting up
 
-## Fork this repo
+## [Fork this repo](fork)
 
 ## Log into Kosli at https://app.kosli.com using GitHub
 
@@ -54,10 +54,10 @@ This should run the image locally, in a container, on port 4500.
 Check you can reach `localhost:4500` in your browser.
 It should show the string `Alpha` and nothing else.
 
-## Create a KOSLI_API_TOKEN and save it as a Github Action secret
+## Create a KOSLI_API_TOKEN and save it as a GitHub Action secret
 
 (Note: In a Shared Organization you would do this under a Service account) 
-- At https://app.kosli.com click your github user icon at the top-right
+- At https://app.kosli.com click your GitHub user icon at the top-right
 - In the dropdown select `Profile`
 - Click the blue `[+ Add API Key]` button
 - Choose a value for the `API key expires in` or leave it as Never
@@ -65,17 +65,18 @@ It should show the string `Alpha` and nothing else.
 - Click the blue `[Add]` button
 - You will see the api-key, something like `p1Qv8TggcjOG_UX-WImP3Y6LAf2VXPNN_p9-JtFuHr0`
 - Copy this api-key (Kosli stores a hashed version of this, so it will never be available from https://app.kosli.com again)
-- Create a Github Action secret, called `KOSLI_API_TOKEN`, set to the copied value
+- Create a [GitHub Action secret](settings/secrets/actions), called `KOSLI_API_TOKEN`, set to the copied value
 
 ## Check the env:DOCKER_ORG_NAME setting
 
-- The `.github/workflows/alpha_main.yml` file has this near the top:
+- Edit the file [.github/workflows/alpha_main.yml](edit/main/.github/workflows/alpha_main.yml)
+- The [.github/workflows/alpha_main.yml](.github/workflows/alpha_main.yml) file has this near the top:
 ```yml
 env:
   DOCKER_ORG_NAME: ${{ github.repository_owner }}
 ```
 Docker Org names cannot contain uppercase characters.
-There is currently no built-in Github Action function to convert uppercase to lowercase.
+There is currently no built-in GitHub Action function to convert uppercase to lowercase.
 If `repository_owner` (your GitHub username) contains uppercase characters, edit this line to its lowercased value.
 For example, if `repository_owner==JohnSmith`, then
 ```yml
@@ -88,7 +89,7 @@ env:
 - The repo is set up as a monorepo, with dirs called `alpha`, `beta`, and `webapp`
   for the three services. The `.github/workflows` files have `on: paths:` filters set, so they only run when
   there is a change in their respective directory (or the workflow file itself)
-- Edit the file `alpha/code/alpha.rb` so the return string from the `'/'` route is something other than `Alpha`
+- Edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is something other than `Alpha`
 - git add
 - git commit
 - git push
