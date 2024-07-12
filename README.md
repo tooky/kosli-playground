@@ -173,9 +173,8 @@ to install the Kosli CLI and create the Flow and Trail.
 - git push
 
 - Wait for the Github Action to complete
-- In https://app.kosli.com, click `Flows` on the left hand side menu.
-- You should see a single Flow whose name is `playground-alpha-ci`
-- Click this Flow name `playground-alpha-ci`
+- In https://app.kosli.com, click `Flows` on the left hand side menu
+- Click the Flow named `playground-alpha-ci`
 - You should see a single Trail whose name is the repo's current HEAD commit
 - This Trail will have no attestations
 - Is there a new Snapshot in the `playground-prod` Environment?
@@ -184,7 +183,10 @@ to install the Kosli CLI and create the Flow and Trail.
 ## Attest the provenance of the Artifact in the CI pipeline
 
 - In `.github/workflows/alpha_main.yml`, add the following entries to the end of the `build:` job
-to install the Kosli CLI and attest the Artifact's digest/fingerprint.
+to install the Kosli CLI and attest the Artifact's digest/fingerprint. Note that the `kosli attest`
+command does not need to specify the `--org` or `--flow` or `--trail` flags because there are environment
+variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
+
 ```yml
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
@@ -206,6 +208,21 @@ to install the Kosli CLI and attest the Artifact's digest/fingerprint.
 - You will see a new Snapshot
 - The Artifact will have Provenance
 
+
+## View a deployment diff
+
+- Re-edit the file `alpha/code/alpha.rb` so the return string from the `'/'` route is yet another new string
+- git add
+- git commit
+- git push
+- The CI pipeline should run successfully
+- Open https://app.kolsi.com to your `playground-alpha` Environment
+- You will see a new Snapshot
+- The Artifact will have Provenance
+- Click the `>` chevron to reveal more information in a drop-down
+- Click the link titled `View diff` in the entry called `Previous` to
+see the deployment-diff; the commit-level diff between the currently running
+alpha Artifact, and the alpha Artifact it replaced.
 
 
 
