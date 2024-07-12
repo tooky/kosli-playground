@@ -40,11 +40,10 @@ This is the Kosli Environment that will record what is running in the "docker co
 - REPO_NAME if you changed from `playground`
 - KOSLI_ORG to the name of your Kosli personal Org
 
-## Check you can build an image locally
+## Check you can build an image locally [optional]
 
 ```bash
-cd alpha
-make image
+make -C alpha image
 ```
 This should create an image called: `ghcr.io/${DOCKER_ORG_NAME}/playground-alpha:0c74d4c`
 where `0c74d4c` will be the short-sha of your current HEAD commit.

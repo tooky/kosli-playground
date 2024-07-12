@@ -108,9 +108,8 @@ jobs:
         fetch-depth: 1
 
     - name: Run Rubocop linter on source
-      run: |
-        cd "${{ env.SERVICE_NAME }}"
-        make lint
+      run:
+        make -C "${{ env.SERVICE_NAME }}" lint
 
   unit-test:
     name: Run unit-tests and attest to Kosli
@@ -122,11 +121,9 @@ jobs:
         fetch-depth: 1
 
     - name: Run unit-tests
-      run: |
-        cd "${{ env.SERVICE_NAME }}"
-        make test
-        cd ..
-        
+      run:
+        make -C "${{ env.SERVICE_NAME }}" test
+
 
   deploy:
     runs-on: ubuntu-latest
