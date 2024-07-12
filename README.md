@@ -85,13 +85,13 @@ env:
   DOCKER_ORG_NAME: johnsmith  # ${{ github.repository_owner }} converted to lowercase.
 ```
 
-## Make a change, commit, and push
+## Make a change, run the CI workflow
 
 - The repo is set up as a monorepo, with dirs called `alpha`, `beta`, and `webapp`
   for the three services. The `.github/workflows` files have `on: paths:` filters set, so they only run when
   there is a change in their respective directory (or the workflow file itself)
 - Edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is something other than `Alpha`
-- git commit (and push if not editing in GitHub) 
+- Commit (add+commit+push if not editing in GitHub)
 - The fake [deploy](.github/workflows/alpha_main.yml#L128) job runs this command:
   ```yml
   docker compose up ${{ env.SERVICE_NAME }} --wait
@@ -113,10 +113,10 @@ and this Artifact currently has no [provenance](https://www.kosli.com/blog/how-t
 ). We will provide provenance shortly.
 
 
-## Make another change, commit, and push
+## Make another change, rerun the CI workflow
 
 - Re-edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is a new string
-- git commit (and push if not editing in GitHub)
+- Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
 - Refresh the `playground-prod` Environment at https://app.kosli.com and verify it now has two snapshots.
 - Again, the image tag should be the short-sha of your new HEAD commit
@@ -158,7 +158,7 @@ to install the Kosli CLI and create the Kosli Flow and Kosli Trail.
           kosli begin trail "${{ env.KOSLI_TRAIL }}"
             --description="${{ github.actor }} - $(git log -1 --pretty=%B)"
 ```
-- git commit (and push if not editing in GitHub)
+- Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
 - In https://app.kosli.com, click `Flows` on the left hand side menu
 - Click the Flow named `playground-alpha-ci`
@@ -206,7 +206,7 @@ environment variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
   - You can also provide the fingerprint directly using the `--fingerprint` flag or `KOSLI_FINGERPRINT` environment 
     variable. We will seem examples of this later. 
     ```
-- git commit (and push if not editing in GitHub)
+- Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
 - Refresh the `playground-prod` Environment at https://app.kosli.com 
 - You will see a new Snapshot
@@ -216,15 +216,14 @@ environment variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
 ## View a deployment diff
 
 - Re-edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is yet another new string
-- git commit (and push if not editing in GitHub)
+- Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
 - Refresh the `playground-prod` Environment at https://app.kosli.com
 - You will see a new Snapshot
 - Its Artifact will have Provenance
 - Click the `>` chevron to reveal more information in a drop-down
-- Click the link titled `View diff` in the entry called `Previous` to
-see the deployment-diff; the commit-level diff between the currently running
-alpha Artifact, and the alpha Artifact it replaced.
+- Click the link titled `View diff` in the entry called `Previous` to see the deployment-diff; the commit-level diff 
+between the currently running alpha Artifact, and the alpha Artifact it replaced.
 
 
 ## Attest unit-test evidence to Kosli
@@ -243,6 +242,6 @@ alpha Artifact, and the alpha Artifact it replaced.
       run:
         kosli attest junit --name=alpha.unit-test --results-dir=alpha/test/reports/junit
 ```
-- git commit (and push if not working in GitHub)
+- Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
 
