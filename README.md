@@ -200,11 +200,11 @@ to install the Kosli CLI and create the Kosli Flow and Kosli Trail.
   ```
 - Note that the `kosli attest` command does not need to specify the `--org` or `--flow` or `--trail` flags because there are 
 environment variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
-  - The command above asks the Kosli CLI to calculate the fingerprint. To do this the CLI needs to be told
+  - In the `kosli attest artifact` command above the Kosli CLI calculates the fingerprint. To do this the CLI needs to be told
   the name of the Docker image (`${needs.setup.outputs.image_name}`), and that this is a Docker image
-  (`--artifact-type=docker`). This requires that the image has previously been pushed to its registry (which of course it has)
+  (`--artifact-type=docker`), and that the image has previously been pushed to its registry (which it has)
   - You can also provide the fingerprint directly using the `--fingerprint` flag or `KOSLI_FINGERPRINT` environment 
-    variable. We will seem examples of this later. 
+    variable. We will see examples of this later. 
     ```
 - Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
