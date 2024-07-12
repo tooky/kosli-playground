@@ -70,7 +70,6 @@ It should show the string `Alpha` and nothing else.
 
 ## Check the env:DOCKER_ORG_NAME setting
 
-- Edit the file [.github/workflows/alpha_main.yml](edit/main/.github/workflows/alpha_main.yml)
 - The [.github/workflows/alpha_main.yml](.github/workflows/alpha_main.yml) file has this near the top:
 ```yml
 env:
