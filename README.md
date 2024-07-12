@@ -174,7 +174,21 @@ to install the Kosli CLI and create the Flow and Trail.
 
 ## Attest the provenance of the Artifact in the CI pipeline
 
-- In `.github/workflows/alpha_main.yml`, add the following entries to the end of the `build:` job
+- Most attestations need the Docker image digest/fingerprint. So we will start by making this available to all jobs.
+- In `.github/workflows/alpha_main.yml`, uncomment the following comments near the top of the `build-image:` job
+```yml
+#    outputs:
+#      artifact_digest: ${{ steps.variables.outputs.artifact_digest }}
+```
+- In `.github/workflows/alpha_main.yml`, uncomment the following comments near the bottom of the `build-image:` job
+```yml
+#    - name: Make image digest available to following jobs
+#      id: variables
+#      run: |
+#        DIGEST=$(echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')
+#        echo "artifact_digest=${DIGEST}" >> ${GITHUB_OUTPUT}
+```
+- In `.github/workflows/alpha_main.yml`, add the following to the end of the `build-image:` job
 to install the Kosli CLI and attest the Artifact's digest/fingerprint.
 ```yml
       - name: Setup Kosli CLI
@@ -190,20 +204,12 @@ to install the Kosli CLI and attest the Artifact's digest/fingerprint.
 ```
 - Note that the `kosli attest` command does not need to specify the `--org` or `--flow` or `--trail` flags because there are 
 environment variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
-- There are two ways to provide a Docker image's digest/fingerprint to Kosli
-  - The command above asks the Kosli CLI to calculate the fingerprint. To do this the CLI needs to be told
-     the name of the Docker image (`${needs.setup.outputs.image_name}`), and that this is a Docker image
-     (`--artifact-type=docker`). This option requires that the image has previously been pushed to its registry.
-  - You can also provide the fingerprint directly using the `--fingerprint` flag or `KOSLI_FINGERPRINT` environment 
-    variable. Simply capture it from the GitHub Action `docker/build-push-action@v5` digest output.
-    ```yml
-      - name: Attest image provenance to Kosli Trail
-        run: | 
-          DIGEST=$( echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')
-          kosli attest artifact "${needs.setup.outputs.image_name}" \
-            --fingerprint="${DIGEST}" \
-            --name=alpha
-    ```
+- The command above asks the Kosli CLI to calculate the fingerprint. To do this the CLI needs to be told
+the name of the Docker image (`${needs.setup.outputs.image_name}`), and that this is a Docker image
+(`--artifact-type=docker`). This requires that the image has previously been pushed to its registry (which of course it has)
+- You can also provide the fingerprint directly using the `--fingerprint` flag or `KOSLI_FINGERPRINT` environment 
+  variable. We will seem examples of this later. 
+  ```
 - git add
 - git commit
 - git push
@@ -229,4 +235,24 @@ see the deployment-diff; the commit-level diff between the currently running
 alpha Artifact, and the alpha Artifact it replaced.
 
 
+## Attest unit-test evidence to Kosli
+
+- `.github/workflows/alpha_main.yml` has a `unit-test:` job. You will attest its results to Kosli
+- Add the following to the end of the `unit-test:` job to install the Kosli CLI, and attest the unit-test results
+```yml
+    - name: Install the Kosli CLI
+      uses: actions/checkout@v4.1.1
+      with:
+        fetch-depth: 1
+          
+    - name: Attest unit-test results to Kosli
+      env:
+        KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.artifact_digest }}
+      run:
+        kosli attest junit --name=alpha.unit-test --results-dir=alpha/test/reports/junit
+```
+- git add
+- git commit
+- git push
+- Wait for the GitHub Action Workflow to complete
 
