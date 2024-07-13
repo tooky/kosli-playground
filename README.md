@@ -32,13 +32,13 @@ each repository's CI pipeline. For example:
   [runner](https://github.com/cyber-dojo/runner) repository on GitHub. It runs the tests submitted from the browser.
   - [creator-ci](https://app.kosli.com/cyber-dojo/flows/creator-ci/trails/) is the Kosli Flow for the
   [creator](https://gitlab.com/cyber-dojo/creator/) repository on Gitlab. It creates individual practice sessions.
-- Each cyber-dojo Flow contains one Trail for each commit to its corresponding repository. For example:
+- Each Flow contains one Trail for each commit to its corresponding repository. For example:
   - [1394fe76d45aaf40bf19817e0d8110b570848c9f](https://app.kosli.com/cyber-dojo/flows/runner-ci/trails/1394fe76d45aaf40bf19817e0d8110b570848c9f)
-  is the Kosli Trail for the runner Artifact built from commit 1394fe. This Artifact has numerous pieces of
-  evidence (attested from its CI pipeline), including a snyk-code-scan.
+  is the Kosli Trail for the runner Artifact built from commit [1394fe](https://github.com/cyber-dojo/runner/commit/1394fe76d45aaf40bf19817e0d8110b570848c9f).
+  This Trail has numerous pieces of evidence (attested from its CI pipeline), including a snyk-code-scan.
   - [2252c4c22d325c5da618f90744625e540fc7cfae](https://app.kosli.com/cyber-dojo/flows/creator-ci/trails/2252c4c22d325c5da618f90744625e540fc7cfae)
-  is the Kosli Trail for the creator Artifact built from commit 2252c4c. This Artifact also has numerous pieces of
-  evidence (attested from it CI pipeline), including a pull-request.
+  is the Kosli Trail for the creator Artifact built from commit [2252c4c](https://gitlab.com/cyber-dojo/creator/-/commit/2252c4c22d325c5da618f90744625e540fc7cfae). 
+  This Trail also has numerous pieces of evidence (attested from it CI pipeline), including a pull-request.
 - Each cyber-dojo repo CI pipeline deploys to two AWS ECS clusters:
   - https://beta.cyber-dojo.org runs on its staging cluster. The Kosli Environment for this cluster
     is [aws-beta](https://app.kosli.com/cyber-dojo/environments/aws-beta/events/)
@@ -46,8 +46,8 @@ each repository's CI pipeline. For example:
     is [aws-prod](https://app.kosli.com/cyber-dojo/environments/aws-prod/events/)
 - Each Kosli Environment page has two main tabs:
   - [Snapshots](https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/)
-    Each snapshot is numbered (from 1) and shows all the Artifacts running at a given moment in time.
-    At the time of writing, there are 2793 snapshots for aws-prod, covering several years. 
+    Each snapshot is numbered (from 1) and shows all the Artifacts running at a given moment in time and their compliance status.
+    At the time of writing, there are 2793 snapshots for `aws-prod`, covering several years. 
   - [Log](https://app.kosli.com/cyber-dojo/environments/aws-prod/events/)
     The log shows all the changes to individual Artifacts (and their compliance status) in the given Environment. 
     The log is paginated, and at the time of writing there are 131 pages.
