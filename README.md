@@ -14,13 +14,6 @@ Each component has an independent GitHub Actions workflow.
 Each workflow will trigger when changes to the relevant component are pushed to the main branch.
 
 
-# Setting up
-
-## [Fork this repo](https://github.com/kosli-dev/playground/fork)
-
-Follow the remaining instructions from the README in your forked repo.
-
-
 ## Start to get familiar with Kosli [optional]
 
 There is a public Kosli Organization called [cyber-dojo](https://app.kosli.com/cyber-dojo/dashboard/) which can explore
@@ -53,6 +46,14 @@ For example:
   - [Log](https://app.kosli.com/cyber-dojo/environments/aws-prod/events/)  
     The log shows all the changes to individual Artifacts (and their compliance status) in the given Environment. 
     The log is paginated, and at the time of writing there are 131 pages for `aws-prod`.
+
+
+# Setting up
+
+## [Fork this repo](https://github.com/kosli-dev/playground/fork)
+
+Please follow the remaining instructions from the README in your forked repo.
+(This is so the links take you to the files in your repo)
 
 
 ## Log into Kosli at https://app.kosli.com using GitHub
