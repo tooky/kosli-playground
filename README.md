@@ -38,7 +38,7 @@ This is the Kosli Environment that will record what is running in the "docker co
 
 ## Set the .env file variables
 
-- Edit the [.env](edit/main/.env) file as follows:
+- Edit the [.env](.env) file as follows:
   - KOSLI_ORG to the name of your Kosli personal Org
   - DOCKER_ORG_NAME to your GitHub username in lowercase
   - REPO_NAME if you changed from `playground`
