@@ -21,7 +21,11 @@ Each workflow fakes the deployment step by doing a "docker compose up"
 
 ## Log into Kosli at https://app.kosli.com using GitHub
 
-This will create a Personal Kosli Organization whose name is your GitHub username.
+Logging in using GitHub creates a Personal Kosli Organization whose name is your GitHub username.
+You cannot invite other people to your personal organization; it is intended only to try Kosli out
+as you are now doing. For real use you would create a Shared Kosli Organization and invite people to it.
+(You can create a Shared Organization from the top-right dropdown next to your user-icon.)
+
 
 ## At https://app.kosli.com create a Docker Environment
 
@@ -93,10 +97,9 @@ It should show the string `Alpha` and nothing else.
 - Wait for the GitHub Action Workflow to complete.
 - Refresh the `playground-prod` Environment at https://app.kosli.com and verify there is now a single snapshot
 showing the `playground-alpha` image running. The image tag should be the short-sha of your new HEAD commit 
-- The playground-alpha Artifact is showing as Compliant. 
-  This is because the Environment was set up with `Require artifacts to have provenance`=Off.
-  This Artifact currently has no [provenance](https://www.kosli.com/blog/how-to-secure-your-software-supply-chain-with-artifact-binary-provenance/
-). We will provide provenance shortly.
+- This playground-alpha Artifact currently has no [provenance](https://www.kosli.com/blog/how-to-secure-your-software-supply-chain-with-artifact-binary-provenance/
+) but is nevertheless showing as Compliant. This is because the Environment was set up with `Require artifacts to have provenance`=Off. 
+We will provide provenance shortly.
 
 
 ## Make another change, rerun the CI workflow
@@ -155,7 +158,7 @@ to install the Kosli CLI and create the Kosli Flow and Kosli Trail.
 
 ## Attest the provenance of the Artifact in the CI pipeline
 
-- Most attestations need the Docker image digest/fingerprint. So we will start by making this available to all jobs.
+- Most attestations need the Docker image digest/fingerprint. We will start by making this available to all jobs.
 - In [.github/workflows/alpha_main.yml](.github/workflows/alpha_main.yml)...
   - uncomment the following comments near the top of the `build-image:` job
   ```yml
@@ -190,7 +193,7 @@ environment variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
   the name of the Docker image (`${needs.setup.outputs.image_name}`), and that this is a Docker image
   (`--artifact-type=docker`), and that the image has previously been pushed to its registry (which it has)
   - You can also provide the fingerprint directly using the `--fingerprint` flag or `KOSLI_FINGERPRINT` environment 
-    variable. We will see examples of this later. 
+    variable. We will see an example of this shortly. 
     ```
 - Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
@@ -201,7 +204,7 @@ environment variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
 
 ## View a deployment diff
 
-- Re-edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is yet another new string
+- Re-edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is a new string
 - Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
 - Refresh the `playground-prod` Environment at https://app.kosli.com
