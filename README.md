@@ -12,7 +12,6 @@ This is a very simple demo application. It is made up of three components:
 This repo is a monorepo with each component in its own directory with its own Makefile.
 Each component has an independent GitHub Actions workflow. 
 Each workflow will trigger when changes to the relevant component are pushed to the main branch.
-Each workflow fakes the deployment step by doing a "docker compose up"
 
 
 # Setting up
@@ -24,12 +23,13 @@ Each workflow fakes the deployment step by doing a "docker compose up"
 Logging in using GitHub creates a Personal Kosli Organization whose name is your GitHub username.
 You cannot invite other people to your personal organization; it is intended only to try Kosli out
 as you are now doing. For real use you would create a Shared Kosli Organization and invite people to it.
-(You can create a Shared Organization from the top-right dropdown next to your user-icon.)
+(Shared Organizations are created from the top-right dropdown next to your user-icon.)
 
 
 ## At https://app.kosli.com create a Docker Environment
 
-This is the Kosli Environment that will record what is running in the "docker compose up" fake deployment.
+In this playground the CI pipelines fake their deployment step by doing a "docker compose up".
+Create a Kosli Environment to record what is running in this fake deployment.
 - Select `Environments` from left hand side menu
 - Click the blue `[Add new environment]` button at the top
 - Fill in the Name field as `playground-prod`
@@ -45,7 +45,7 @@ This is the Kosli Environment that will record what is running in the "docker co
 - Edit the [.env](.env) file as follows:
   - KOSLI_ORG to the name of your Kosli personal Org
   - DOCKER_ORG_NAME to your GitHub username in lowercase
-  - REPO_NAME if you changed from `playground`
+  - REPO_NAME if you changed it from `playground`
 
 ## Check you can build and run an image locally [optional]
 
