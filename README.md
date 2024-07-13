@@ -23,8 +23,9 @@ Follow the remaining instructions from the README in your forked repo.
 
 ## Start to get familiar with Kosli [optional]
 
-There is a public Kosli Organization called cyber-dojo which can explore without having to log into
-Kosli. Cyber-dojo is an open-source application for practicing TDD from your browser. 
+There is a public Kosli Organization called [cyber-dojo](https://app.kosli.com/cyber-dojo/dashboard/) which can explore
+without having to log into Kosli. It is the Kosli Organization for [cyber-dojo](https://cyber-dojo.org), an open-source
+application for practicing TDD from your browser. 
 - cyber-dojo has 10 microservices, each with their own repository. There is a Kosli Flow for  
 each repository's CI pipeline. For example:
   - [runner-ci](https://app.kosli.com/cyber-dojo/flows/runner-ci/trails/) is the Kosli Flow for the
