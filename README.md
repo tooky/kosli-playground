@@ -32,25 +32,26 @@ This is the Kosli Environment that will record what is running in the "docker co
 - Check the `Docker host` radio button for the Type
 - Fill in the `Description` field
 - Leave `Exclude scaling events` checked
-- Switch `Compliance Calculation Require artifacts to have provenance` to `On`
+- Leave `Compliance Calculation Require artifacts to have provenance` set to `Off`
 - Click the blue `[Save environment]` button
 - Open a tab in your browser for the `playground-prod` Kosli Environment as we will often review how it changes 
 
-## Set the variables in the `.env` file at the root of the repo
+## Set the .env file variables
 
-- DOCKER_ORG_NAME to your GitHub username
-- REPO_NAME if you changed from `playground`
-- KOSLI_ORG to the name of your Kosli personal Org
+- Edit the [.env](.env) file as follows:
+  - KOSLI_ORG to the name of your Kosli personal Org
+  - DOCKER_ORG_NAME to your GitHub username in lowercase
+  - REPO_NAME if you changed from `playground`
 
-## Check you can build an image locally [optional]
+## Check you can build and run an image locally [optional]
 
 ```bash
 make -C alpha image
 ```
-This should create an image called: `ghcr.io/${DOCKER_ORG_NAME}/playground-alpha:0c74d4c`
+This should create an image called: `ghcr.io/${DOCKER_ORG_NAME}/${REPO_NAME}-alpha:0c74d4c`
 where `0c74d4c` will be the short-sha of your current HEAD commit.
 ```bash
-make run
+make -C alpha run
 ```
 This should run the image locally, in a container, on port 4500.
 Check you can reach `localhost:4500` in your browser.
@@ -69,34 +70,19 @@ It should show the string `Alpha` and nothing else.
 - Copy this api-key (Kosli stores a hashed version of this, so it will never be available from https://app.kosli.com again)
 - Create a GitHub Action secret (at the repo level), called `KOSLI_API_TOKEN`, set to the copied value
 
-## Check the env:DOCKER_ORG_NAME setting
-
-- The [.github/workflows/alpha_main.yml](.github/workflows/alpha_main.yml) file has this near the top:
-```yml
-env:
-  DOCKER_ORG_NAME: ${{ github.repository_owner }}
-```
-Docker Org names cannot contain uppercase characters.
-There is currently no built-in GitHub Action function to convert uppercase to lowercase.
-If `repository_owner` (your GitHub username) contains uppercase characters, edit this line to its lowercased value.
-For example, if `repository_owner==JohnSmith`, then
-```yml
-env:
-  DOCKER_ORG_NAME: johnsmith  # ${{ github.repository_owner }} converted to lowercase.
-```
 
 ## Make a change, run the CI workflow
 
 - The repo is set up as a monorepo, with dirs called `alpha`, `beta`, and `webapp`
   for the three services. The `.github/workflows` files have `on: paths:` filters set, so they only run when
   there is a change in their respective directory (or the workflow file itself)
-- Edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is something other than `Alpha`
+- Edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is a new string
 - Commit (add+commit+push if not editing in GitHub)
 - The fake [deploy](.github/workflows/alpha_main.yml#L128) job runs this command:
   ```yml
   docker compose up ${{ env.SERVICE_NAME }} --wait
   ```
-  After this command, the CI pipeline has a step to install the Kosli CLI, and then runs this command:
+  After this command, the CI pipeline installs the Kosli CLI, and then runs this command:
   ```yml
   kosli snapshot docker "${KOSLI_ENVIRONMENT_NAME}"
   ```
@@ -107,9 +93,9 @@ env:
 - Wait for the GitHub Action Workflow to complete.
 - Refresh the `playground-prod` Environment at https://app.kosli.com and verify there is now a single snapshot
 showing the `playground-alpha` image running. The image tag should be the short-sha of your new HEAD commit 
-The playground-alpha Artifact is showing as Non-Compliant.
-This is because the Environment was set up to `Require artifacts to have provenance`
-and this Artifact currently has no [provenance](https://www.kosli.com/blog/how-to-secure-your-software-supply-chain-with-artifact-binary-provenance/
+- The playground-alpha Artifact is showing as Compliant. 
+  This is because the Environment was set up with `Require artifacts to have provenance`=Off.
+  This Artifact currently has no [provenance](https://www.kosli.com/blog/how-to-secure-your-software-supply-chain-with-artifact-binary-provenance/
 ). We will provide provenance shortly.
 
 
@@ -147,13 +133,13 @@ to install the Kosli CLI and create the Kosli Flow and Kosli Trail.
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Create Kosli Flow
+      - name: Create the Kosli Flow for this pipeline
         run:
           kosli create flow "${{ env.KOSLI_FLOW }}"
-            --description="Diff files from two traffic-lights"
-            --template-file=.kosli.yml
+            --description="Learning about Kosli"
+            --use-empty-template
 
-      - name: Begin Kosli Trail
+      - name: Begin Kosli Trail for this commit
         run:
           kosli begin trail "${{ env.KOSLI_TRAIL }}"
             --description="${{ github.actor }} - $(git log -1 --pretty=%B)"
@@ -223,7 +209,7 @@ environment variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
 - Its Artifact will have Provenance
 - Click the `>` chevron to reveal more information in a drop-down
 - Click the link titled `View diff` in the entry called `Previous` to see the deployment-diff; the commit-level diff 
-between the currently running alpha Artifact, and the alpha Artifact it replaced.
+between the currently running alpha Artifact, and the previously running alpha Artifact.
 
 
 ## Attest unit-test evidence to Kosli
