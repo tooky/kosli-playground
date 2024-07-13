@@ -52,7 +52,7 @@ For example:
     At the time of writing, there are 2793 snapshots for `aws-prod`, covering several years. 
   - [Log](https://app.kosli.com/cyber-dojo/environments/aws-prod/events/)  
     The log shows all the changes to individual Artifacts (and their compliance status) in the given Environment. 
-    The log is paginated, and at the time of writing there are 131 pages.
+    The log is paginated, and at the time of writing there are 131 pages for `aws-prod`.
 
 
 ## Log into Kosli at https://app.kosli.com using GitHub
