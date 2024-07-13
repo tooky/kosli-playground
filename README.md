@@ -299,4 +299,4 @@ image running. The image tag should be the short-sha of your new HEAD commit
   - Its commit-sha name matches the commit in the latest `aws-prod` Snapshot
   - There is an attestation called `alpha.unit-test`
   - Click the `>` chevron in the Trail to open the attestation drop-down
-  - Browser the JUnit results in the JSON sent by the `kosli attest junit` command
+  - Browse the JUnit results in the JSON sent by the `kosli attest junit` command
