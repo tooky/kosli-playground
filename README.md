@@ -47,10 +47,10 @@ For example:
   - https://cyber-dojo.org runs on its production cluster. The Kosli Environment for this cluster
     is [aws-prod](https://app.kosli.com/cyber-dojo/environments/aws-prod/events/)
 - Each Kosli Environment page has two main tabs:
-  - [Snapshots](https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/)
+  - [Snapshots](https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/)  
     Each snapshot is numbered (from 1) and shows all the Artifacts running at a given moment in time and their compliance status.
     At the time of writing, there are 2793 snapshots for `aws-prod`, covering several years. 
-  - [Log](https://app.kosli.com/cyber-dojo/environments/aws-prod/events/)
+  - [Log](https://app.kosli.com/cyber-dojo/environments/aws-prod/events/)  
     The log shows all the changes to individual Artifacts (and their compliance status) in the given Environment. 
     The log is paginated, and at the time of writing there are 131 pages.
 
