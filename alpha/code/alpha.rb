@@ -6,7 +6,7 @@ require_relative 'prober'
 # Example monorepo micro-service
 class Alpha < Sinatra::Base
   get '/' do
-    'Apples'
+    'Arancini'
   end
 
   get '/ready' do
