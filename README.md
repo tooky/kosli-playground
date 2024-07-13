@@ -18,6 +18,8 @@ Each workflow will trigger when changes to the relevant component are pushed to 
 
 ## [Fork this repo](https://github.com/kosli-dev/playground/fork)
 
+Follow the remaining instructions in this README from your forked repo.
+
 
 ## Log into Kosli at https://app.kosli.com using GitHub
 
@@ -79,7 +81,7 @@ It should show the string `Alpha` and nothing else.
 - Create a GitHub Action secret (at the repo level), called `KOSLI_API_TOKEN`, set to the copied value
 
 
-# Understand the CI pipeline structure
+# Understand the fake deployment in the CI pipeline
 
 - The repo is set up as a monorepo, with dirs called `alpha`, `beta`, and `webapp`
   for the three services. The `.github/workflows` files have `on: paths:` filters set, so they only run when
@@ -99,19 +101,19 @@ It should show the string `Alpha` and nothing else.
   the `KOSLI_ORG` and `KOSLI_API_TOKEN` environment variables have been set at the top of the workflow yml file.
 
 
-## Make a change, run the CI workflow, see an Environment snapshot in Kosli
+## Make a change, run the CI workflow, review the Environment in Kosli
 
 - Edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is a new string
 - Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete.
-- Refresh the `playground-prod` Environment at https://app.kosli.com and verify there is now a single snapshot
-showing the `playground-alpha` image running. The image tag should be the short-sha of your new HEAD commit 
+- Refresh the `playground-prod` Environment at https://app.kosli.com and verify it shows the `playground-alpha` 
+image running. The image tag should be the short-sha of your new HEAD commit 
 - This playground-alpha Artifact currently has no [provenance](https://www.kosli.com/blog/how-to-secure-your-software-supply-chain-with-artifact-binary-provenance/
 ) but is nevertheless showing as Compliant. This is because the Environment was set up with `Require artifacts to have provenance`=Off. 
 We will provide provenance shortly.
 
 
-## Make another change, rerun the CI workflow, see a new Environment snapshot in Kosli
+## Make another change, rerun the CI workflow, review the Environment in Kosli
 
 - Re-edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is a new string
 - Commit (add+commit+push if not editing in GitHub)
@@ -244,4 +246,7 @@ between the currently running alpha Artifact, and the previously running alpha A
 ```
 - Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
+- Refresh the `playground-prod` Environment at https://app.kosli.com and verify it shows the new `playground-alpha` 
+image running. The image tag should be the short-sha of your new HEAD commit
+- 
 
