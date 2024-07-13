@@ -26,13 +26,15 @@ Follow the remaining instructions from the README in your forked repo.
 There is a public Kosli Organization called [cyber-dojo](https://app.kosli.com/cyber-dojo/dashboard/) which can explore
 without having to log into Kosli. It is the Kosli Organization for [cyber-dojo](https://cyber-dojo.org), an open-source
 application for practicing TDD from your browser. 
-- cyber-dojo has 10 microservices, each with their own repository. There is a Kosli Flow for  
-each repository's CI pipeline. For example:
+- cyber-dojo has 10 microservices, each with their own repository.  
+There is a Kosli Flow for each repository's CI pipeline.  
+For example:
   - [runner-ci](https://app.kosli.com/cyber-dojo/flows/runner-ci/trails/) is the Kosli Flow for the
   [runner](https://github.com/cyber-dojo/runner) repository on GitHub. It runs the tests submitted from the browser.
   - [creator-ci](https://app.kosli.com/cyber-dojo/flows/creator-ci/trails/) is the Kosli Flow for the
   [creator](https://gitlab.com/cyber-dojo/creator/) repository on Gitlab. It creates individual practice sessions.
-- Each Flow contains one Trail for each commit to its corresponding repository. For example:
+- Each Flow contains one Trail for each commit to its corresponding repository.  
+  For example:
   - [1394fe76d45aaf40bf19817e0d8110b570848c9f](https://app.kosli.com/cyber-dojo/flows/runner-ci/trails/1394fe76d45aaf40bf19817e0d8110b570848c9f)
   is the Kosli Trail for the runner Artifact built from commit [1394fe](https://github.com/cyber-dojo/runner/commit/1394fe76d45aaf40bf19817e0d8110b570848c9f).
   This Trail has numerous pieces of evidence (attested from its CI pipeline), including a snyk-code-scan.
