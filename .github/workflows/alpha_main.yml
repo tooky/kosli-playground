@@ -52,6 +52,22 @@ jobs:
         echo "tagged_image_previous=${tagged_image_previous}" >> ${GITHUB_OUTPUT}
         echo "image_tar_filename=${image_tar_filename}" >> ${GITHUB_OUTPUT}
 
+          - name: Setup the Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ env.KOSLI_CLI_VERSION }}
+
+    - name: Create the Kosli Flow for this pipeline
+      run:
+        kosli create flow "${{ env.KOSLI_FLOW }}"
+          --description="Learning about Kosli"
+          --use-empty-template
+
+    - name: Begin Kosli Trail for this commit
+      run:
+        kosli begin trail "${{ env.KOSLI_TRAIL }}"
+          --description="${{ github.actor }} - $(git log -1 --pretty=%B)"
+
 
   build-image:
     name: Build docker image, push it to registry, attest to Kosli
