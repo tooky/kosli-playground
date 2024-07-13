@@ -146,7 +146,7 @@ It should show the string `Alpha` and nothing else.
 
 - Edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is a new string
 - Commit (add+commit+push if not editing in GitHub)
-- Wait for the GitHub Action Workflow to complete.
+- Wait for the GitHub Action Workflow to complete
 - Refresh the `playground-prod` Environment at https://app.kosli.com and verify it shows the `playground-alpha` 
 image running. The image tag should be the short-sha of your new HEAD commit 
 - This playground-alpha Artifact currently has No [provenance](https://www.kosli.com/blog/how-to-secure-your-software-supply-chain-with-artifact-binary-provenance/
@@ -254,7 +254,8 @@ environment variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
 - Wait for the GitHub Action Workflow to complete
 - Refresh the `playground-prod` Environment at https://app.kosli.com 
 - You will see a new Snapshot
-- The Artifact will have Provenance
+- This time the Artifact will have Provenance. You can see the Flow and Trail, and also the git commit
+  short-sha, and git commit message.
 
 
 ## View a deployment diff
@@ -266,8 +267,8 @@ environment variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
 - You will see a new Snapshot
 - Its Artifact will have Provenance
 - Click the `>` chevron to reveal more information in a drop-down
-- Click the link titled `View diff` in the entry called `Previous` to see the deployment-diff; the commit-level diff 
-between the currently running alpha Artifact, and the previously running alpha Artifact.
+- Click the link titled `View diff` in the entry called `Previous` to see the deployment-diff; this is a diff
+  (spanning potentially many commits) between the currently running alpha Artifact, and the previously running alpha Artifact.
 
 
 ## Attest unit-test evidence to Kosli
@@ -288,7 +289,14 @@ between the currently running alpha Artifact, and the previously running alpha A
 ```
 - Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
+- The [kosli attest junit](https://docs.kosli.com/client_reference/kosli_attest_junit/) command
+  reports the JUnit XML results files in the `--results-dir`. The alpha Artifact's tests
+  are written using the Ruby MiniTest framework. In this framework, (and most others), it is easy
+  to also output the test results in the JUnit XML format. See line 7 of [alpha/test/test_base.rb](alpha/test/test_base.rb)
 - Refresh the `playground-prod` Environment at https://app.kosli.com and verify it shows the new `playground-alpha` 
 image running. The image tag should be the short-sha of your new HEAD commit
-- 
-
+- Open the latest Trail in the `playground-alpha-ci` Flow and verify
+  - Its commit-sha name matches the commit in the latest `aws-prod` Snapshot
+  - There is an attestation called `alpha.unit-test`
+  - Click the `>` chevron in the Trail to open the attestation drop-down
+  - Browser the JUnit results in the JSON sent by the `kosli attest junit` command
