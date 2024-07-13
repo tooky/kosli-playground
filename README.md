@@ -18,12 +18,13 @@ Each workflow will trigger when changes to the relevant component are pushed to 
 
 ## [Fork this repo](https://github.com/kosli-dev/playground/fork)
 
+
 ## Log into Kosli at https://app.kosli.com using GitHub
 
 Logging in using GitHub creates a Personal Kosli Organization whose name is your GitHub username.
 You cannot invite other people to your personal organization; it is intended only to try Kosli out
-as you are now doing. For real use you would create a Shared Kosli Organization and invite people to it.
-(Shared Organizations are created from the top-right dropdown next to your user-icon.)
+as you are now doing. For real use you would create a Shared Kosli Organization (from the top-right 
+dropdown next to your user-icon) and invite people to it.
 
 
 ## At https://app.kosli.com create a Docker Environment
@@ -40,12 +41,14 @@ Create a Kosli Environment to record what is running in this fake deployment.
 - Click the blue `[Save environment]` button
 - Open a tab in your browser for the `playground-prod` Kosli Environment as we will often review how it changes 
 
+
 ## Set the .env file variables
 
 - Edit the [.env](.env) file as follows:
   - KOSLI_ORG to the name of your Kosli personal Org
   - DOCKER_ORG_NAME to your GitHub username in lowercase
   - REPO_NAME if you changed it from `playground`
+
 
 ## Check you can build and run an image locally [optional]
 
@@ -60,6 +63,7 @@ make -C alpha run
 This should run the image locally, in a container, on port 4500.
 Check you can reach `localhost:4500` in your browser.
 It should show the string `Alpha` and nothing else.
+
 
 ## Create a KOSLI_API_TOKEN and save it as a GitHub Action secret
 
