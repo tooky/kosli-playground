@@ -20,6 +20,8 @@ env:
   KOSLI_HOST: https://app.kosli.com
   KOSLI_ORG: ${{ github.actor }}
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+  KOSLI_FLOW: playground-alpha-ci
+  KOSLI_TRAIL: ${{ github.sha }}
 
 jobs:
 
