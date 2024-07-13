@@ -30,14 +30,9 @@ test_in_containers()
   local -r HOST_TEST_DIR="${ROOT_DIR}/test"
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # Tell caller where the test results are...
-  local -r HOST_REPORTS_DIR="${HOST_TEST_DIR}/reports"
-  mkdir -p "${HOST_REPORTS_DIR}"
-
-  local -r COVERAGE_JSON_FILE="${HOST_REPORTS_DIR}/coverage.json"
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # Tell caller where the test info is...
+  local -r HOST_REPORTS_DIR="${HOST_TEST_DIR}/reports"
+  local -r COVERAGE_JSON_FILE="${HOST_REPORTS_DIR}/coverage.json"
   echo
   echo "alpha test branch-coverage report is at: ${HOST_REPORTS_DIR}/index.html"
   echo "alpha test branch-coverage stats are at: ${COVERAGE_JSON_FILE}"

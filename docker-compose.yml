@@ -24,11 +24,9 @@ services:
     user: ${ALPHA_USER}
     env_file: [ .env ]
     ports: [ "${ALPHA_PORT}:${ALPHA_PORT}" ]
-    read_only: true
     restart: "no"
     volumes:
-      - ./alpha/test:/app/test/:ro
-      - ./alpha/test/reports:/app/test/reports:rw
+      - ./alpha/test:/app/test/
       - type: tmpfs
         target: /tmp
         tmpfs:
@@ -47,11 +45,9 @@ services:
     user: ${BETA_USER}
     env_file: [ .env ]
     ports: [ "${BETA_PORT}:${BETA_PORT}" ]
-    read_only: true
     restart: "no"
     volumes:
-      - ./beta/test:/app/test/:ro
-      - ./beta/test/reports:/app/test/reports:rw
+      - ./beta/test:/app/test/
       - type: tmpfs
         target: /tmp
         tmpfs:

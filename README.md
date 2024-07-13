@@ -52,8 +52,11 @@ For example:
 
 ## [Fork this repo](https://github.com/kosli-dev/playground/fork)
 
-Please follow the remaining instructions from the README in your forked repo.
-(This is so the links take you to the files in your repo)
+- Click the `Actions` tab at the top of your forked repo.
+- You will see a message saying `Workflows aren’t being run on this forked repository`.
+- Click the green button to enable Workflows on your forked repo.
+- Please follow the remaining instructions from the README in your forked repo.
+  (This is so the links take you to the files in your repo)
 
 
 ## Log into Kosli at https://app.kosli.com using GitHub
@@ -72,22 +75,24 @@ Create a Kosli Environment to record what is running in this fake deployment.
 - Click the blue `[Add new environment]` button at the top
 - Fill in the Name field as `playground-prod`
 - Check the `Docker host` radio button for the Type
-- Fill in the `Description` field
+- Fill in the `Description` field, eg `Learning about Kosli`
 - Leave `Exclude scaling events` checked
 - Leave `Compliance Calculation Require artifacts to have provenance` set to `Off`
-- Click the blue `[Save environment]` button
+- Click the blue `[Create environment]` button
 - Open a tab in your browser for the `playground-prod` Kosli Environment as we will often review how it changes 
 
 
 ## Set the .env file variables
 
-- Edit the [.env](.env) file as follows:
-  - KOSLI_ORG to the name of your Kosli personal Org
+- Edit (and save) the [.env](.env) file as follows:
+  - KOSLI_ORG to the name of your Kosli personal Org (your GitHub username)
   - DOCKER_ORG_NAME to your GitHub username in lowercase
   - REPO_NAME if you changed it from `playground`
 
 
-## Check you can build and run an image locally [optional]
+## Check you can build and run an image locally
+
+This step is optional and can be skipped if you are editing files directly in GitHub.
 
 ```bash
 make -C alpha image
@@ -109,19 +114,20 @@ It should show the string `Alpha` and nothing else.
 - In the dropdown select `Profile`
 - Click the blue `[+ Add API Key]` button
 - Choose a value for the `API key expires in` or leave it as Never
-- Fill in the `Description` field
+- Fill in the `Description` field, eg `playground CI`
 - Click the blue `[Add]` button
 - You will see the api-key, something like `p1Qv8TggcjOG_UX-WImP3Y6LAf2VXPNN_p9-JtFuHr0`
-- Copy this api-key (Kosli stores a hashed version of this, so it will never be available from https://app.kosli.com again)
+- Copy this api-key (Kosli stores a hashed version of this, so it will never be available from https://app.kosli.com again).
+  There is a small copy button to the right of the api-key.
 - Create a GitHub Action secret (at the repo level), called `KOSLI_API_TOKEN`, set to the copied value
 
 
 # Understand the fake deployment in the CI pipeline
 
 - The repo is set up as a monorepo, with dirs called `alpha`, `beta`, and `webapp`
-  for the three services. The `.github/workflows` files have `on: paths:` filters set, so they only run when
+  for the three services. The `.github/workflows` yml files have `on: paths:` filters set and only run when
   there is a change in their respective directory (or the workflow file itself)
-- There is a "FAKE" [deploy](.github/workflows/alpha_main.yml#L128) job which runs this command:
+- There is a *fake* [deploy](.github/workflows/alpha_main.yml#L128) job which runs this command to bring up the container in the CI pipeline!
   ```yml
   docker compose up ${{ env.SERVICE_NAME }} --wait
   ```
@@ -130,7 +136,7 @@ It should show the string `Alpha` and nothing else.
   kosli snapshot docker "${KOSLI_ENVIRONMENT_NAME}"
   ```
   The [kosli snapshot docker](https://docs.kosli.com/client_reference/kosli_snapshot_docker/) command takes a snapshot 
-  of the docker containers currently running (inside the CI pipeline)
+  of the docker containers currently running (inside the CI pipeline!)
   and sends their image names and digests/fingerprints to the named Kosli Environment (`playground-prod`).
   This command does _not_ need to set the `--org`, or `--api-token` flags because
   the `KOSLI_ORG` and `KOSLI_API_TOKEN` environment variables have been set at the top of the workflow yml file.
@@ -143,7 +149,7 @@ It should show the string `Alpha` and nothing else.
 - Wait for the GitHub Action Workflow to complete.
 - Refresh the `playground-prod` Environment at https://app.kosli.com and verify it shows the `playground-alpha` 
 image running. The image tag should be the short-sha of your new HEAD commit 
-- This playground-alpha Artifact currently has no [provenance](https://www.kosli.com/blog/how-to-secure-your-software-supply-chain-with-artifact-binary-provenance/
+- This playground-alpha Artifact currently has No [provenance](https://www.kosli.com/blog/how-to-secure-your-software-supply-chain-with-artifact-binary-provenance/
 ) but is nevertheless showing as Compliant. This is because the Environment was set up with `Require artifacts to have provenance`=Off. 
 We will provide provenance shortly.
 
@@ -155,7 +161,7 @@ We will provide provenance shortly.
 - Wait for the GitHub Action Workflow to complete
 - Refresh the `playground-prod` Environment at https://app.kosli.com and in the [Log] view verify
   - the previous playground-alpha Artifact has exited
-  - the new playground-alpha Artifact is running, and this Artifact has provenance (there is a commit short-sha and a commit message)
+  - the new playground-alpha Artifact is running, and this Artifact still has No provenance
 
 
 ## Create a Kosli Flow and Trail
@@ -177,12 +183,10 @@ env:
 - Still in [.github/workflows/alpha_main.yml](.github/workflows/alpha_main.yml), add the following entries to the end of the `setup:` job
 to install the Kosli CLI and create the Kosli Flow and Kosli Trail.
 ```yml
-      - uses: actions/checkout@v4.1.1
-
       - name: Setup the Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
+          version: ${{ env.KOSLI_CLI_VERSION }}
 
       - name: Create the Kosli Flow for this pipeline
         run:
@@ -202,6 +206,9 @@ to install the Kosli CLI and create the Kosli Flow and Kosli Trail.
 - You should see a single Trail whose name is the repo's current HEAD commit
 - Click the Trail name to view it, and confirm this Trail has no attestations
 - Is there a new Snapshot in the `playground-prod` Environment?
+  There is. Even if the docker layer-caching in the CI pipeline means the Artifact
+  has the same digest/fingerprint as the previous commit, Kosli can tell from the
+  timestamps that the image has been restarted.
 
 
 ## Attest the provenance of the Artifact in the CI pipeline
@@ -227,11 +234,11 @@ to install the Kosli CLI and create the Kosli Flow and Kosli Trail.
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
+          version: ${{ env.KOSLI_CLI_VERSION }}
 
       - name: Attest image provenance to Kosli Trail
         run: 
-          kosli attest artifact "${needs.setup.outputs.image_name}" 
+          kosli attest artifact "${{ needs.setup.outputs.image_name }}" 
             --artifact-type=docker
             --name=alpha
   ```
@@ -268,10 +275,10 @@ between the currently running alpha Artifact, and the previously running alpha A
 - [.github/workflows/alpha_main.yml](.github/workflows/alpha_main.yml) has a `unit-test:` job. You will attest its results to Kosli
 - Add the following to the end of the `unit-test:` job to install the Kosli CLI, and attest the unit-test results
 ```yml
-    - name: Install the Kosli CLI
-      uses: actions/checkout@v4.1.1
+    - name: Setup Kosli CLI
+      uses: kosli-dev/setup-cli-action@v2
       with:
-        fetch-depth: 1
+        version: ${{ env.KOSLI_CLI_VERSION }}
           
     - name: Attest unit-test results to Kosli
       env:

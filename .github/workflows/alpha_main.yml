@@ -5,6 +5,8 @@ on:
     branches:
       - main
     paths:
+      - .env
+      - docker-compose.yml
       - alpha/**
       - .github/workflows/alpha_main.yml
 

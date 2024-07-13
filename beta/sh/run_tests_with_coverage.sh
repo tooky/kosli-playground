@@ -12,6 +12,7 @@ export $(echo_env_vars)
 
 run_tests_with_coverage()
 {
+  mkdir "${ROOT_DIR}/test/reports" || true
   server_up_healthy_and_clean
   test_in_containers "$@"
 }
