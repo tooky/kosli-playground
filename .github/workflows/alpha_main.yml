@@ -161,6 +161,15 @@ jobs:
       run:
         make -C "${{ env.SERVICE_NAME }}" test
 
+    - name: Setup Kosli CLI
+      uses: kosli-dev/setup-cli-action@v2
+      with:
+        version: ${{ env.KOSLI_CLI_VERSION }}
+          
+    - name: Attest unit-test results to Kosli
+      run:
+        kosli attest junit --name=alpha.unit-test --results-dir=alpha/test/reports/junit
+
 
   deploy:
     runs-on: ubuntu-latest
