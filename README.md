@@ -79,14 +79,12 @@ It should show the string `Alpha` and nothing else.
 - Create a GitHub Action secret (at the repo level), called `KOSLI_API_TOKEN`, set to the copied value
 
 
-## Make a change, run the CI workflow
+# Understand the CI pipeline structure
 
 - The repo is set up as a monorepo, with dirs called `alpha`, `beta`, and `webapp`
   for the three services. The `.github/workflows` files have `on: paths:` filters set, so they only run when
   there is a change in their respective directory (or the workflow file itself)
-- Edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is a new string
-- Commit (add+commit+push if not editing in GitHub)
-- The fake [deploy](.github/workflows/alpha_main.yml#L128) job runs this command:
+- There is a "FAKE" [deploy](.github/workflows/alpha_main.yml#L128) job which runs this command:
   ```yml
   docker compose up ${{ env.SERVICE_NAME }} --wait
   ```
@@ -94,10 +92,17 @@ It should show the string `Alpha` and nothing else.
   ```yml
   kosli snapshot docker "${KOSLI_ENVIRONMENT_NAME}"
   ```
-  This takes a snapshot of the docker containers currently running (inside the CI pipeline)
-  and sends their image names and digests/fingerprints to the named Kosli Environment.
-  Note that this command does _not_ need to set the `--org`, or `--api-token` flags because
+  The [kosli snapshot docker](https://docs.kosli.com/client_reference/kosli_snapshot_docker/) command takes a snapshot 
+  of the docker containers currently running (inside the CI pipeline)
+  and sends their image names and digests/fingerprints to the named Kosli Environment (`playground-prod`).
+  This command does _not_ need to set the `--org`, or `--api-token` flags because
   the `KOSLI_ORG` and `KOSLI_API_TOKEN` environment variables have been set at the top of the workflow yml file.
+
+
+## Make a change, run the CI workflow, see an Environment snapshot in Kosli
+
+- Edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is a new string
+- Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete.
 - Refresh the `playground-prod` Environment at https://app.kosli.com and verify there is now a single snapshot
 showing the `playground-alpha` image running. The image tag should be the short-sha of your new HEAD commit 
@@ -106,23 +111,25 @@ showing the `playground-alpha` image running. The image tag should be the short-
 We will provide provenance shortly.
 
 
-## Make another change, rerun the CI workflow
+## Make another change, rerun the CI workflow, see a new Environment snapshot in Kosli
 
 - Re-edit the file [alpha/code/alpha.rb](alpha/code/alpha.rb) so the return string from the `'/'` route is a new string
 - Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
-- Refresh the `playground-prod` Environment at https://app.kosli.com and verify it now has two snapshots.
-- Again, the image tag should be the short-sha of your new HEAD commit
+- Refresh the `playground-prod` Environment at https://app.kosli.com and in the [Log] view verify
+  - the previous playground-alpha Artifact has exited
+  - the new playground-alpha Artifact is running, and this Artifact has provenance (there is a commit short-sha and a commit message)
 
 
 ## Create a Kosli Flow and Trail
 
 - Kosli attestations must be made against a Trail, living inside a Flow.
   - A Kosli Flow represents a business or software process for which you want to track changes and monitor compliance.
+    You create a Kosli Flow with the [kosli create flow](https://docs.kosli.com/client_reference/kosli_create_flow/) command.
   - A Kosli Trail represents a single execution instance of a process represented by a Kosli Flow. 
     Each trail must have a unique identifier of your choice, based on your process and domain. 
     Example identifiers include git commits or pull request numbers.
-  
+    You begin a Kosli Trail with the [kosli begin trail](https://docs.kosli.com/client_reference/kosli_begin_trail/) command.
 - At the top of the [.github/workflows/alpha_main.yml](.github/workflows/alpha_main.yml) file add two new `env:` variables for the
 Kosli Flow (named after your repo) and Kosli Trail (named after each git-commit), as follows:
 ```yml
@@ -156,7 +163,7 @@ to install the Kosli CLI and create the Kosli Flow and Kosli Trail.
 - In https://app.kosli.com, click `Flows` on the left hand side menu
 - Click the Flow named `playground-alpha-ci`
 - You should see a single Trail whose name is the repo's current HEAD commit
-- This Trail will have no attestations
+- Click the Trail name to view it, and confirm this Trail has no attestations
 - Is there a new Snapshot in the `playground-prod` Environment?
 
 
@@ -169,7 +176,7 @@ to install the Kosli CLI and create the Kosli Flow and Kosli Trail.
   #    outputs:
   #      artifact_digest: ${{ steps.variables.outputs.artifact_digest }}
   ```
-  - uncomment the following comments near the bottom of the `build-image:` job
+  - uncomment the following comments at the bottom of the `build-image:` job
   ```yml
   #    - name: Make image digest available to following jobs
   #      id: variables
@@ -191,14 +198,14 @@ to install the Kosli CLI and create the Kosli Flow and Kosli Trail.
             --artifact-type=docker
             --name=alpha
   ```
-- Note that the `kosli attest` command does not need to specify the `--org` or `--flow` or `--trail` flags because there are 
+- Note that `kosli attest` commands do not need to specify the `--org` or `--flow` or `--trail` flags because there are 
 environment variables called `KOSLI_ORG`, `KOSLI_FLOW`, and `KOSLI_TRAIL`.
-  - In the `kosli attest artifact` command above the Kosli CLI calculates the fingerprint. To do this the CLI needs to be told
+  - In the [kosli attest artifact](https://docs.kosli.com/client_reference/kosli_attest_artifact/) command above, the 
+  Kosli CLI calculates the fingerprint. To do this the CLI needs to be told
   the name of the Docker image (`${needs.setup.outputs.image_name}`), and that this is a Docker image
   (`--artifact-type=docker`), and that the image has previously been pushed to its registry (which it has)
   - You can also provide the fingerprint directly using the `--fingerprint` flag or `KOSLI_FINGERPRINT` environment 
-    variable. We will see an example of this shortly. 
-    ```
+    variable. We will see an example of this shortly.
 - Commit (add+commit+push if not editing in GitHub)
 - Wait for the GitHub Action Workflow to complete
 - Refresh the `playground-prod` Environment at https://app.kosli.com 
