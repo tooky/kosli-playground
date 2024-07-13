@@ -37,7 +37,7 @@ jobs:
     - name: Set outputs
       id: variables
       run: |
-        export $(cat .env)  # to get DOCKER_ORG_NAME
+        export $(cat .env | grep -o '^[^#]*')  # to get DOCKER_ORG_NAME
         image_tag="${GITHUB_SHA:0:7}"
         image_uri="${{ env.DOCKER_REGISTRY }}/${DOCKER_ORG_NAME}/${{ env.REPO_NAME }}-${{ env.SERVICE_NAME }}"
         image_name="${image_uri}:${image_tag}"
