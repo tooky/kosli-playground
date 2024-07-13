@@ -30,9 +30,9 @@ application for practicing TDD from your browser.
 There is a Kosli Flow for each repository's CI pipeline.  
 For example:
   - [runner-ci](https://app.kosli.com/cyber-dojo/flows/runner-ci/trails/) is the Kosli Flow for the
-  [runner](https://github.com/cyber-dojo/runner) repository on GitHub. It runs the tests submitted from the browser.
+  [runner](https://github.com/cyber-dojo/runner) repo's CI pipeline on GitHub. It runs the tests submitted from the browser.
   - [creator-ci](https://app.kosli.com/cyber-dojo/flows/creator-ci/trails/) is the Kosli Flow for the
-  [creator](https://gitlab.com/cyber-dojo/creator/) repository on Gitlab. It creates individual practice sessions.
+  [creator](https://gitlab.com/cyber-dojo/creator/) repo's CI pipeline on Gitlab. It creates individual practice sessions.
 - Each Flow contains one Trail for each commit to its corresponding repository.  
   For example:
   - [1394fe76d45aaf40bf19817e0d8110b570848c9f](https://app.kosli.com/cyber-dojo/flows/runner-ci/trails/1394fe76d45aaf40bf19817e0d8110b570848c9f)
