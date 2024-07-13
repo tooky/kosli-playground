@@ -52,10 +52,10 @@ jobs:
         echo "tagged_image_previous=${tagged_image_previous}" >> ${GITHUB_OUTPUT}
         echo "image_tar_filename=${image_tar_filename}" >> ${GITHUB_OUTPUT}
 
-          - name: Setup the Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ env.KOSLI_CLI_VERSION }}
+    - name: Setup the Kosli CLI
+      uses: kosli-dev/setup-cli-action@v2
+      with:
+        version: ${{ env.KOSLI_CLI_VERSION }}
 
     - name: Create the Kosli Flow for this pipeline
       run:
