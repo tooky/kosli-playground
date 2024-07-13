@@ -18,7 +18,7 @@ Each workflow will trigger when changes to the relevant component are pushed to 
 
 ## [Fork this repo](https://github.com/kosli-dev/playground/fork)
 
-Follow the remaining instructions in this README from your forked repo.
+Follow the remaining instructions from the README in your forked repo.
 
 
 ## Log into Kosli at https://app.kosli.com using GitHub
