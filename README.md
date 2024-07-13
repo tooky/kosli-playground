@@ -17,7 +17,7 @@ Each workflow fakes the deployment step by doing a "docker compose up"
 
 # Setting up
 
-## [Fork this repo](fork)
+## Fork this repo
 
 ## Log into Kosli at https://app.kosli.com using GitHub
 
