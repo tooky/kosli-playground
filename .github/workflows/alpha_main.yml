@@ -77,8 +77,8 @@ jobs:
       id-token: write
       contents: read
       packages: write
-#    outputs:
-#      artifact_digest: ${{ steps.variables.outputs.artifact_digest }}
+    outputs:
+      artifact_digest: ${{ steps.variables.outputs.artifact_digest }}
 
     steps:
     - uses: actions/checkout@v4.1.1
@@ -116,11 +116,22 @@ jobs:
         path: ${{ needs.setup.outputs.image_tar_filename }}
         key: ${{ needs.setup.outputs.image_name }}
 
-#    - name: Make the image digest available to following jobs
-#      id: variables
-#      run: |
-#        DIGEST=$(echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')
-#        echo "artifact_digest=${DIGEST}" >> ${GITHUB_OUTPUT}
+    - name: Make the image digest available to following jobs
+      id: variables
+      run: |
+        DIGEST=$(echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')
+        echo "artifact_digest=${DIGEST}" >> ${GITHUB_OUTPUT}
+
+    - name: Setup Kosli CLI
+      uses: kosli-dev/setup-cli-action@v2
+      with:
+        version: ${{ env.KOSLI_CLI_VERSION }}
+
+    - name: Attest image provenance to Kosli Trail
+      run: 
+        kosli attest artifact "${{ needs.setup.outputs.image_name }}" 
+          --artifact-type=docker
+          --name=alpha
 
 
   lint:
